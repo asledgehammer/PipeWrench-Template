@@ -46,10 +46,10 @@ if (fs.existsSync('./src/footer.lua')) {
 }
 
 const main = () => {
-    if (!fs.existsSync('./media/lua')) fs.mkdirSync('./media/lua');
-    if (!fs.existsSync('./media/lua/client')) fs.mkdirSync('./media/lua/client');
-    if (!fs.existsSync('./media/lua/server')) fs.mkdirSync('./media/lua/server');
-    if (!fs.existsSync('./media/lua/shared')) fs.mkdirSync('./media/lua/shared');
+    if (!fs.existsSync('./media/lua')) fs.mkdirSync('./media/lua', {recursive: true});
+    if (!fs.existsSync('./media/lua/client')) fs.mkdirSync('./media/lua/client', {recursive: true});
+    if (!fs.existsSync('./media/lua/server')) fs.mkdirSync('./media/lua/server', {recursive: true});
+    if (!fs.existsSync('./media/lua/shared')) fs.mkdirSync('./media/lua/shared', {recursive: true});
 
     let args = process.argv.reverse();
     args.pop();
@@ -123,7 +123,7 @@ const main = () => {
                         cursor.grey();
                         console.log(`${PREFIX} - Creating "${dst}"..`);
                         cursor.reset();
-                        fs.mkdirSync(dst);
+                        fs.mkdirSync(dst, {recursive: true});
                     }
                 }
             });
@@ -210,7 +210,7 @@ const checkDir = (file: string) => {
     for (let i = 1; i < split.length - 1; i++) {
         dir += `/${split[i]}`;
     }
-    if (!fs.existsSync(dir)) fs.mkdirSync(dir);
+    if (!fs.existsSync(dir)) fs.mkdirSync(dir, {recursive: true});
 };
 
 const handleSrcDir = (scope: Scope, path: string) => {
@@ -225,11 +225,11 @@ const handleSrcDir = (scope: Scope, path: string) => {
         if (entryLower.endsWith('.d.ts')) continue;
         else if (entryLower.endsWith('.ts')) {
             const dstDir = `./media/lua/${path.replace('./src/', '')}`;
-            if (!fs.existsSync(dstDir)) fs.mkdirSync(dstDir);
+            if (!fs.existsSync(dstDir)) fs.mkdirSync(dstDir, {recursive: true});
             compileFile(scope, pathEntry, `${dstDir}/${entry.replace('.ts', '.lua')}`);
         } else if (entryLower.endsWith('.lua')) {
             const dstDir = `./media/lua/${path.replace('./src/', '')}`;
-            if (!fs.existsSync(dstDir)) fs.mkdirSync(dstDir);
+            if (!fs.existsSync(dstDir)) fs.mkdirSync(dstDir, {recursive: true});
             copyFile(pathEntry, `${dstDir}/${entry}`);
         }
     }

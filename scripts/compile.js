@@ -4,11 +4,16 @@
  *
  * (Designed for the Project Zomboid environment)
  *
+ * TODO: Create declaration files.
+ * TODO: Manual copying of Lua files from src/ to media/
+ *
  * @author JabDoesThings
  */
 exports.__esModule = true;
 var ansi = require('ansi');
 var cursor = ansi(process.stdout);
+// import * as tsnode from 'ts-node';
+// tsnode.create()
 var fs = require("fs");
 var chokidar = require("chokidar");
 var typescript_1 = require("typescript");
@@ -33,13 +38,13 @@ if (fs.existsSync('./src/footer.lua')) {
 }
 var main = function () {
     if (!fs.existsSync('./media/lua'))
-        fs.mkdirSync('./media/lua');
+        fs.mkdirSync('./media/lua', { recursive: true });
     if (!fs.existsSync('./media/lua/client'))
-        fs.mkdirSync('./media/lua/client');
+        fs.mkdirSync('./media/lua/client', { recursive: true });
     if (!fs.existsSync('./media/lua/server'))
-        fs.mkdirSync('./media/lua/server');
+        fs.mkdirSync('./media/lua/server', { recursive: true });
     if (!fs.existsSync('./media/lua/shared'))
-        fs.mkdirSync('./media/lua/shared');
+        fs.mkdirSync('./media/lua/shared', { recursive: true });
     var args = process.argv.reverse();
     args.pop();
     args.pop();
@@ -111,7 +116,7 @@ var main = function () {
                         cursor.grey();
                         console.log("".concat(PREFIX, " - Creating \"").concat(dst, "\".."));
                         cursor.reset();
-                        fs.mkdirSync(dst);
+                        fs.mkdirSync(dst, { recursive: true });
                     }
                 }
             });
@@ -202,7 +207,7 @@ var checkDir = function (file) {
         dir += "/".concat(split[i]);
     }
     if (!fs.existsSync(dir))
-        fs.mkdirSync(dir);
+        fs.mkdirSync(dir, { recursive: true });
 };
 var handleSrcDir = function (scope, path) {
     var sharedSrcFiles = fs.readdirSync(path);
@@ -219,13 +224,13 @@ var handleSrcDir = function (scope, path) {
         else if (entryLower.endsWith('.ts')) {
             var dstDir = "./media/lua/".concat(path.replace('./src/', ''));
             if (!fs.existsSync(dstDir))
-                fs.mkdirSync(dstDir);
+                fs.mkdirSync(dstDir, { recursive: true });
             compileFile(scope, pathEntry, "".concat(dstDir, "/").concat(entry.replace('.ts', '.lua')));
         }
         else if (entryLower.endsWith('.lua')) {
             var dstDir = "./media/lua/".concat(path.replace('./src/', ''));
             if (!fs.existsSync(dstDir))
-                fs.mkdirSync(dstDir);
+                fs.mkdirSync(dstDir, { recursive: true });
             copyFile(pathEntry, "".concat(dstDir, "/").concat(entry));
         }
     }
