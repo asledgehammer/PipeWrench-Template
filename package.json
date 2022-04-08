@@ -1,5 +1,5 @@
 {
-  "name": "zomboid_lua_test",
+  "name": "ZomboidTypeScriptModTemplate",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/asledgehammer/CraftHammer_Lua.git"
+    "url": "git+https://github.com/asledgehammer/ZomboidTypeScriptModTemplate.git"
   },
   "keywords": [
     "zomboid_lua_test"
@@ -19,9 +19,9 @@
   "author": "asledgehammer",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/asledgehammer/CraftHammer_Lua/issues"
+    "url": "https://github.com/asledgehammer/ZomboidTypeScriptModTemplate/issues"
   },
-  "homepage": "https://github.com/asledgehammer/CraftHammer_Lua#readme",
+  "homepage": "https://github.com/asledgehammer/ZomboidTypeScriptModTemplate.git#readme",
   "devDependencies": {
     "del-cli": "^4.0.1",
     "ts-node": "^10.7.0",
