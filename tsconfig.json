@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "allowSyntheticDefaultImports": true,
+    "declaration": true,
+    "experimentalDecorators": true,
+    "lib":["ESNext", "DOM"],
+    "module":"ESNext",
+    "moduleResolution": "node",
+    "outDir": "media/lua/shared",
+    "rootDirs": ["./src/shared", "./src/client", "./src/server", "./scripts"],
+    "strict": true,
+    "target":"ESNext",
+    "typeRoots": ["node_modules/@types","./typings"]
+  },
+  "exclude": ["node_modules"],
+  "include": ["./typings/**/*.ts", "src/shared/**/*.ts", "src/client/**/*.ts", "src/server/**/*.ts", "./scripts"]
+}
