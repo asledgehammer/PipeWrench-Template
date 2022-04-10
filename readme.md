@@ -14,14 +14,9 @@ npm run build-scripts
 npm run dev
 ```
 
-(Manually compile directory)
+(Manually compile project)
 ```
-npm run compile [src/client | src/server | src/shared]
-```
-
-(Manually compile TypeScript file)
-```
-npm run compile [path]
+npm run compile
 ```
 
 (Clean)

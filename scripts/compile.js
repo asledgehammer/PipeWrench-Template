@@ -12,30 +12,16 @@
 exports.__esModule = true;
 var ansi = require('ansi');
 var cursor = ansi(process.stdout);
-// import * as tsnode from 'ts-node';
-// tsnode.create()
 var fs = require("fs");
 var chokidar = require("chokidar");
-var typescript_1 = require("typescript");
 var typescript_to_lua_1 = require("typescript-to-lua");
 var PREFIX = '[COMPILER]';
-var compilerOptions = {
-    buildMode: typescript_to_lua_1.BuildMode.Library,
-    luaLibImport: typescript_to_lua_1.LuaLibImportKind.Require,
-    noHeader: true,
-    luaTarget: typescript_to_lua_1.LuaTarget.Universal,
-    noImplicitReturns: true,
-    moduleResolution: typescript_1.ModuleResolutionKind.Classic,
-    noImplicitSelf: true
-};
-var LUA_HEADER_FILE = "";
-var LUA_FOOTER_FILE = "";
-if (fs.existsSync('./src/header.lua')) {
+var LUA_HEADER_FILE = '';
+if (fs.existsSync('./src/header.lua'))
     LUA_HEADER_FILE = fs.readFileSync('./src/header.lua').toString();
-}
-if (fs.existsSync('./src/footer.lua')) {
+var LUA_FOOTER_FILE = '';
+if (fs.existsSync('./src/footer.lua'))
     LUA_FOOTER_FILE = fs.readFileSync('./src/footer.lua').toString();
-}
 var main = function () {
     if (!fs.existsSync('./media/lua'))
         fs.mkdirSync('./media/lua', { recursive: true });
@@ -53,7 +39,7 @@ var main = function () {
         var argLower = args[0].toLowerCase();
         if (argLower === '-w' || argLower === '--watch') {
             PREFIX = '[WATCHER]';
-            chokidar.watch('./src').on('all', function (event, path) {
+            chokidar.watch('./src', { ignoreInitial: true }).on('all', function (event, path) {
                 while (path.indexOf('\\') !== -1) {
                     path = path.replace('\\', '/');
                 }
@@ -71,23 +57,10 @@ var main = function () {
                     if (pathLower.endsWith('.d.ts') || !pathLower.endsWith('.ts')) {
                         return;
                     }
-                    var scope = 'none';
-                    if (pathLower.startsWith('src/client'))
-                        scope = 'client';
-                    else if (pathLower.startsWith('src/server'))
-                        scope = 'server';
-                    else if (pathLower.startsWith('src/shared'))
-                        scope = 'shared';
-                    else
-                        return;
-                    var dst = '' + path.replace('.ts', '.lua');
-                    if (scope === 'client')
-                        dst = dst.replace('src/client', 'media/lua/client');
-                    else if (scope === 'server')
-                        dst = dst.replace('src/server', 'media/lua/server');
-                    else if (scope === 'shared')
-                        dst = dst.replace('src/shared', 'media/lua/shared');
-                    compileFile(scope, path, dst);
+                    cursor.grey();
+                    console.log("".concat(PREFIX, " - File changed: ").concat(path));
+                    cursor.reset();
+                    compileProject();
                 }
                 else if (event === 'unlink') {
                     var dst = 'media/lua' + path.substring(3);
@@ -96,82 +69,40 @@ var main = function () {
                     }
                     if (fs.existsSync(dst)) {
                         cursor.grey();
-                        console.log("".concat(PREFIX, " - Deleting file \"").concat(dst, "\".."));
                         cursor.reset();
                         fs.rmSync(dst);
+                        console.log("".concat(PREFIX, " - Deleted file: ").concat(dst));
                     }
                 }
                 else if (event === 'unlinkDir') {
                     var dst = 'media/lua' + path.substring(3);
                     if (fs.existsSync(dst)) {
                         cursor.grey();
-                        console.log("".concat(PREFIX, " - Deleting directory \"").concat(dst, "\".."));
                         cursor.reset();
                         fs.rmdirSync(dst);
+                        console.log("".concat(PREFIX, " - Deleted directory: ").concat(dst));
                     }
                 }
                 else if (event === 'addDir') {
                     var dst = 'media/lua' + path.substring(3);
                     if (!fs.existsSync(dst)) {
                         cursor.grey();
-                        console.log("".concat(PREFIX, " - Creating \"").concat(dst, "\".."));
+                        console.log("".concat(PREFIX, " - Created file: ").concat(dst));
                         cursor.reset();
                         fs.mkdirSync(dst, { recursive: true });
                     }
                 }
             });
-            return;
-        }
-        var path = args[0];
-        var lstat = fs.lstatSync(path);
-        if (!fs.existsSync(path)) {
-            throw new Error("Path does not exist: ".concat(path));
-        }
-        if (lstat.isDirectory()) {
-            if (path.indexOf('src/client') !== -1)
-                handleSrcDir('client', './src/client');
-            else if (path.indexOf('src/server') !== -1)
-                handleSrcDir('server', './src/server');
-            else if (path.indexOf('src/shared') !== -1)
-                handleSrcDir('shared', './src/shared');
-            else
-                throw new Error('Uknown directory: ');
-        }
-        else {
-            if (path.toLowerCase().endsWith('.d.ts') || !path.toLowerCase().endsWith('.ts')) {
-                throw new Error("File is not typescript file to compile: ".concat(path));
-            }
-            var scope = 'none';
-            if (path.indexOf('src/client') === 0)
-                scope = 'client';
-            else if (path.indexOf('src/server') === 0)
-                scope = 'server';
-            else if (path.indexOf('src/shared') === 0)
-                scope = 'shared';
-            else
-                throw new Error("Path outside scope: ".concat(path));
-            var dst = '' + path.replace('.ts', '.lua');
-            if (scope === 'client')
-                dst = dst.replace('src/client', 'media/lua/client');
-            else if (scope === 'server')
-                dst = dst.replace('src/server', 'media/lua/server');
-            else if (scope === 'shared')
-                dst = dst.replace('src/shared', 'media/lua/shared');
-            compileFile(scope, path, dst);
         }
     }
-    else {
-        handleSrcDir('shared', './src/shared');
-        handleSrcDir('client', './src/client');
-        handleSrcDir('server', './src/server');
-    }
+    compileProject();
 };
 var copyFile = function (src, dst) {
     cursor.grey();
     console.log("".concat(PREFIX, " - Copying \"").concat(src, "\" to \"").concat(dst, "\".."));
     cursor.reset();
     checkDir(dst);
-    if (dst.toLowerCase().endsWith(".lua")) {
+    if (dst.toLowerCase().endsWith('.lua')) {
         var lua = (LUA_HEADER_FILE.length !== 0 ? LUA_HEADER_FILE + '\n' : '') +
             fs.readFileSync(src).toString() +
             (LUA_FOOTER_FILE.length !== 0 ? '\n' + LUA_FOOTER_FILE : '');
@@ -181,24 +112,55 @@ var copyFile = function (src, dst) {
         fs.copyFileSync(src, dst);
     }
 };
-var compileFile = function (scope, path, dst) {
-    var _a;
-    var pathLower = path.toLowerCase();
-    if (pathLower === 'shared' || pathLower === 'client' || pathLower === 'server') {
-        throw new Error("Illegal subdirectory name: ".concat(path));
-    }
+var compileProject = function () {
     cursor.brightGreen();
-    console.log("".concat(PREFIX, " - Compiling \"").concat(path, "\".."));
+    process.stdout.write("".concat(PREFIX, " - Compiling project.."));
     cursor.reset();
-    var b = fs.readFileSync(path).toString();
-    var result = (0, typescript_to_lua_1.transpileString)(b.toString(), compilerOptions);
-    if (((_a = result.file) === null || _a === void 0 ? void 0 : _a.lua) != null) {
-        var lua = (LUA_HEADER_FILE.length !== 0 ? LUA_HEADER_FILE + '\n' : '') +
-            fixRequire(scope, result.file.lua) +
-            (LUA_FOOTER_FILE.length !== 0 ? '\n' + LUA_FOOTER_FILE : '');
-        checkDir(dst);
-        fs.writeFileSync(dst, lua);
-    }
+    var timeThen = new Date().getTime();
+    (0, typescript_to_lua_1.transpileProject)('tsconfig.json', {}, function (fileName, data, _writeByteOrderMark, _onError) {
+        while (fileName.indexOf('\\') !== -1)
+            fileName = fileName.replace('\\', '/');
+        if (fileName.endsWith('.d.ts')) {
+            // Let's figure out what to do for declarations later.
+            return;
+        }
+        var splitter = 'media/lua/shared/';
+        var indexOf = fileName.indexOf('media/lua/shared/');
+        if (indexOf !== -1) {
+            var subFileName = void 0;
+            if (fileName.endsWith('lualib_bundle.lua')) {
+                subFileName = 'media/lua/shared/lualib_bundle.lua';
+            }
+            else {
+                subFileName = 'media/lua/' + fileName.substring(indexOf + splitter.length);
+            }
+            var lua = void 0;
+            if (subFileName.endsWith('lualib_bundle.lua')) {
+                lua = data;
+            }
+            else {
+                var scope = 'none';
+                if (subFileName.startsWith('media/lua/client'))
+                    scope = 'client';
+                else if (subFileName.startsWith('media/lua/server'))
+                    scope = 'server';
+                else if (subFileName.startsWith('media/lua/shared'))
+                    scope = 'shared';
+                lua =
+                    (LUA_HEADER_FILE.length !== 0 ? LUA_HEADER_FILE + '\n' : '') +
+                        fixRequire(scope, data) +
+                        (LUA_FOOTER_FILE.length !== 0 ? '\n' + LUA_FOOTER_FILE : '');
+            }
+            checkDir(subFileName);
+            fs.writeFileSync(subFileName, lua);
+        }
+    });
+    var timeNow = new Date().getTime();
+    var timeDelta = timeNow - timeThen;
+    var timeSeconds = timeDelta / 1000;
+    cursor.brightGreen();
+    process.stdout.write(" Complete. Took ".concat(timeSeconds, " second(s).\n"));
+    cursor.reset();
 };
 var checkDir = function (file) {
     var split = file.split('/');
@@ -208,32 +170,6 @@ var checkDir = function (file) {
     }
     if (!fs.existsSync(dir))
         fs.mkdirSync(dir, { recursive: true });
-};
-var handleSrcDir = function (scope, path) {
-    var sharedSrcFiles = fs.readdirSync(path);
-    for (var _i = 0, sharedSrcFiles_1 = sharedSrcFiles; _i < sharedSrcFiles_1.length; _i++) {
-        var entry = sharedSrcFiles_1[_i];
-        var pathEntry = "".concat(path, "/").concat(entry);
-        if (fs.lstatSync(pathEntry).isDirectory()) {
-            handleSrcDir(scope, pathEntry);
-            continue;
-        }
-        var entryLower = entry.toLowerCase();
-        if (entryLower.endsWith('.d.ts'))
-            continue;
-        else if (entryLower.endsWith('.ts')) {
-            var dstDir = "./media/lua/".concat(path.replace('./src/', ''));
-            if (!fs.existsSync(dstDir))
-                fs.mkdirSync(dstDir, { recursive: true });
-            compileFile(scope, pathEntry, "".concat(dstDir, "/").concat(entry.replace('.ts', '.lua')));
-        }
-        else if (entryLower.endsWith('.lua')) {
-            var dstDir = "./media/lua/".concat(path.replace('./src/', ''));
-            if (!fs.existsSync(dstDir))
-                fs.mkdirSync(dstDir, { recursive: true });
-            copyFile(pathEntry, "".concat(dstDir, "/").concat(entry));
-        }
-    }
 };
 var fixRequire = function (scope, lua) {
     var index = -1;
@@ -273,7 +209,6 @@ var fixRequire = function (scope, lua) {
             // Kahlua only works with '/', nor '.' in 'require(..)'.
             var from = 'require("' + fromImport + '")';
             var to = "require('" + toImport.replace('.', '/') + "')";
-            // console.log('\tReplacing "' + from + '" to "' + to + '".');
             lua = lua.replace(from, to);
         }
     } while (index !== -1);

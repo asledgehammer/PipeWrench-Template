@@ -7,11 +7,11 @@
     "module":"ESNext",
     "moduleResolution": "node",
     "outDir": "media/lua/shared",
-    "rootDirs": ["./src/shared", "./src/client", "./src/server", "./scripts"],
+    "rootDirs": ["./src/shared", "./src/client", "./src/server"],
     "strict": true,
     "target":"ESNext",
     "typeRoots": ["node_modules/@types","./typings"]
   },
   "exclude": ["node_modules"],
-  "include": ["./typings/**/*.ts", "src/shared/**/*.ts", "src/client/**/*.ts", "src/server/**/*.ts", "./scripts"]
+  "include": ["./typings/**/*.ts", "src/shared/**/*.ts", "src/client/**/*.ts", "src/server/**/*.ts"]
 }
