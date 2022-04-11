@@ -11,7 +11,6 @@
     "strict": true,
     "target":"ESNext",
     "typeRoots": ["node_modules/@types", "./typings"],
-    "types": ["lua-types/5.1"]
   },
   "exclude": ["node_modules"],
   "include": ["./typings/**/*.ts", "src/shared/**/*.ts", "src/client/**/*.ts", "src/server/**/*.ts", "node_modules/lua_types/5.1.d.ts"]
