@@ -172,6 +172,41 @@ var checkDir = function (file) {
         fs.mkdirSync(dir, { recursive: true });
 };
 var fixRequire = function (scope, lua) {
+    var fix = function (fromImport) {
+        var toImport = fromImport.replace('.', '/');
+        // let split = toImport.split('.');
+        // if(split.length) {
+        //     if(split.length === 1) {
+        //         toImport = split[0];
+        //     } else {
+        //         toImport = split[1];
+        //         for(let i = 2; i < split.length; i++) {
+        //             toImport += '.' + split[i];
+        //         }
+        //     }
+        // }
+        // Remove cross-references for client/server/shared.
+        if (toImport.startsWith('shared/')) {
+            toImport = toImport.substring('shared/'.length);
+        }
+        else if (toImport.startsWith('client/')) {
+            if (scope === 'server') {
+                cursor.yellow();
+                console.warn("".concat(PREFIX, " - Cannot reference code from src/client from src/server. (Code will fail when ran)"));
+                cursor.reset();
+            }
+            toImport = toImport.substring('client/'.length);
+        }
+        else if (toImport.startsWith('server/')) {
+            if (scope === 'client') {
+                cursor.yellow();
+                console.warn("".concat(PREFIX, " - Cannot reference code from src/server from src/client. (Code will fail when ran)"));
+                cursor.reset();
+            }
+            toImport = toImport.substring('server/'.length);
+        }
+        return toImport;
+    };
     var index = -1;
     do {
         var fromImport = '';
@@ -185,27 +220,7 @@ var fixRequire = function (scope, lua) {
                     break;
                 fromImport += char;
             }
-            var toImport = fromImport.replace('.', '/');
-            // Remove cross-references for client/server/shared.
-            if (toImport.startsWith('shared/')) {
-                toImport = toImport.substring('shared/'.length);
-            }
-            else if (toImport.startsWith('client/')) {
-                if (scope === 'server') {
-                    cursor.yellow();
-                    console.warn("".concat(PREFIX, " - Cannot reference code from src/client from src/server. (Code will fail when ran)"));
-                    cursor.reset();
-                }
-                toImport = toImport.substring('client/'.length);
-            }
-            else if (toImport.startsWith('server/')) {
-                if (scope === 'client') {
-                    cursor.yellow();
-                    console.warn("".concat(PREFIX, " - Cannot reference code from src/server from src/client. (Code will fail when ran)"));
-                    cursor.reset();
-                }
-                toImport = toImport.substring('server/'.length);
-            }
+            var toImport = fix(fromImport);
             // Kahlua only works with '/', nor '.' in 'require(..)'.
             var from = 'require("' + fromImport + '")';
             var to = "require('" + toImport.replace('.', '/') + "')";

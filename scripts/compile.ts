@@ -185,6 +185,47 @@ const checkDir = (file: string) => {
 };
 
 const fixRequire = (scope: Scope, lua: string): string => {
+
+    const fix = (fromImport: string): string => {
+        let toImport = fromImport.replace('.', '/');
+        // let split = toImport.split('.');
+        // if(split.length) {
+        //     if(split.length === 1) {
+        //         toImport = split[0];
+        //     } else {
+        //         toImport = split[1];
+        //         for(let i = 2; i < split.length; i++) {
+        //             toImport += '.' + split[i];
+        //         }
+        //     }
+        // }
+        
+        // Remove cross-references for client/server/shared.
+        if (toImport.startsWith('shared/')) {
+            toImport = toImport.substring('shared/'.length);
+        } else if (toImport.startsWith('client/')) {
+            if (scope === 'server') {
+                cursor.yellow();
+                console.warn(
+                    `${PREFIX} - Cannot reference code from src/client from src/server. (Code will fail when ran)`
+                );
+                cursor.reset();
+            }
+            toImport = toImport.substring('client/'.length);
+        } else if (toImport.startsWith('server/')) {
+            if (scope === 'client') {
+                cursor.yellow();
+                console.warn(
+                    `${PREFIX} - Cannot reference code from src/server from src/client. (Code will fail when ran)`
+                );
+                cursor.reset();
+            }
+            toImport = toImport.substring('server/'.length);
+        }
+
+        return toImport;
+    };
+
     let index = -1;
     do {
         let fromImport = '';
@@ -199,29 +240,7 @@ const fixRequire = (scope: Scope, lua: string): string => {
                 fromImport += char;
             }
 
-            let toImport = fromImport.replace('.', '/');
-            // Remove cross-references for client/server/shared.
-            if (toImport.startsWith('shared/')) {
-                toImport = toImport.substring('shared/'.length);
-            } else if (toImport.startsWith('client/')) {
-                if (scope === 'server') {
-                    cursor.yellow();
-                    console.warn(
-                        `${PREFIX} - Cannot reference code from src/client from src/server. (Code will fail when ran)`
-                    );
-                    cursor.reset();
-                }
-                toImport = toImport.substring('client/'.length);
-            } else if (toImport.startsWith('server/')) {
-                if (scope === 'client') {
-                    cursor.yellow();
-                    console.warn(
-                        `${PREFIX} - Cannot reference code from src/server from src/client. (Code will fail when ran)`
-                    );
-                    cursor.reset();
-                }
-                toImport = toImport.substring('server/'.length);
-            }
+            const toImport = fix(fromImport);
 
             // Kahlua only works with '/', nor '.' in 'require(..)'.
             const from = 'require("' + fromImport + '")';

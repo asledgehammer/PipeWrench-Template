@@ -1,10 +1,7 @@
-/** @@noResolution */
+/** @noResolution @noSelfInFile */
 declare module 'Events' {
     import { java, se, zombie } from 'Zomboid';
-
     type KahluaTable = se.krka.kahlua.vm.KahluaTable;
-
-    /** @noResolution */
     export class EventEmitter<L> {
         readonly id: string;
         constructor(id: string);
@@ -240,23 +237,14 @@ declare module 'Events' {
      * @param perk The perk that is being leveled up.
      * @param level The perk level gained.
      */
-    export type AddXPListener = (
-        this: void,
-        character: zombie.characters.IsoGameCharacter,
-        perk: zombie.characters.skills.PerkFactory$Perk,
-        level: number
-    ) => void;
+    export type AddXPListener = (this: void, character: zombie.characters.IsoGameCharacter, perk: zombie.characters.skills.PerkFactory$Perk, level: number) => void;
     /**
      * Triggered when a special tooltip is being rendered, after a user right-clicked an object.
      *
      * @param objectTooltip The tooltip object to be filled.
      * @param square The grid square on which the tooltip has been triggered.
      */
-    export type DoSpecialTooltipListener = (
-        this: void,
-        objectTooltip: zombie.ui.ObjectTooltip,
-        square: zombie.iso.IsoGridSquare
-    ) => void;
+    export type DoSpecialTooltipListener = (this: void, objectTooltip: zombie.ui.ObjectTooltip, square: zombie.iso.IsoGridSquare) => void;
     /**
      * Triggered every day at midnight. (In-Game)
      */
@@ -281,13 +269,7 @@ declare module 'Events' {
      * @param level Perk level.
      * @param levelUp Whether the perk is being leveled up.
      */
-    export type LevelPerkListener = (
-        this: void,
-        character: zombie.characters.IsoGameCharacter,
-        perk: zombie.characters.skills.PerkFactory$Perk,
-        level: number,
-        levelUp: boolean
-    ) => void;
+    export type LevelPerkListener = (this: void, character: zombie.characters.IsoGameCharacter, perk: zombie.characters.skills.PerkFactory$Perk, level: number, levelUp: boolean) => void;
     /**
      * Triggered when a square is being loaded.
      *
@@ -335,12 +317,7 @@ declare module 'Events' {
      * @param newState The new AI state.
      * @param oldState The old AI state.
      */
-    export type OnAIStateChangeListener = (
-        this: void,
-        character: zombie.characters.IsoGameCharacter,
-        newState: zombie.ai.State,
-        oldState: zombie.ai.State
-    ) => void;
+    export type OnAIStateChangeListener = (this: void, character: zombie.characters.IsoGameCharacter, newState: zombie.ai.State, oldState: zombie.ai.State) => void;
     /**
      * Triggered when an ambient sound starts.
      *
@@ -369,11 +346,7 @@ declare module 'Events' {
      * @param player The character who's colliding with another character.
      * @param character The character who's being collided with.
      */
-    export type OnCharacterCollideListener = (
-        this: void,
-        player: zombie.characters.IsoGameCharacter,
-        character: zombie.characters.IsoGameCharacter
-    ) => void;
+    export type OnCharacterCollideListener = (this: void, player: zombie.characters.IsoGameCharacter, character: zombie.characters.IsoGameCharacter) => void;
     /**
      * Triggered when a character dies.
      *
@@ -392,13 +365,7 @@ declare module 'Events' {
      * @param player The player who initiated the client command.
      * @param args The arguments of the client command.
      */
-    export type OnClientCommandListener = (
-        this: void,
-        module: string,
-        command: string,
-        player: zombie.characters.IsoPlayer,
-        args: KahluaTable
-    ) => void;
+    export type OnClientCommandListener = (this: void, module: string, command: string, player: zombie.characters.IsoPlayer, args: KahluaTable) => void;
     /**
      * Triggered after the ClimateManager has been initialized.
      *
@@ -422,10 +389,7 @@ declare module 'Events' {
      *
      * @param playerOrCharacter The character whose clothing has been updated.
      */
-    export type OnClothingUpdatedListener = (
-        this: void,
-        playerOrCharacter: zombie.characters.IsoPlayer | zombie.characters.IsoGameCharacter
-    ) => void;
+    export type OnClothingUpdatedListener = (this: void, playerOrCharacter: zombie.characters.IsoPlayer | zombie.characters.IsoGameCharacter) => void;
     /**
      * Triggered when the player successfully connects to the server.
      */
@@ -448,14 +412,7 @@ declare module 'Events' {
      *
      * @param container The container which is being updated.
      */
-    export type OnContainerUpdateListener = (
-        this: void,
-        container:
-            | zombie.inventory.types.Food
-            | zombie.iso.objects.IsoDeadBody
-            | zombie.iso.IsoGridSquare
-            | zombie.iso.objects.IsoWorldInventoryObject
-    ) => void;
+    export type OnContainerUpdateListener = (this: void, container: zombie.inventory.types.Food | zombie.iso.objects.IsoDeadBody | zombie.iso.IsoGridSquare | zombie.iso.objects.IsoWorldInventoryObject) => void;
     /**
      * Triggered when a player fails to join a cooperative game.
      *
@@ -469,23 +426,14 @@ declare module 'Events' {
      * @param playerNick The nick of the player who's sending the message.
      * @param steamID The Steam identifier of the player who's sending the message.
      */
-    export type OnCoopServerMessageListener = (
-        this: void,
-        messageType: string,
-        playerNick: string,
-        steamID: string
-    ) => void;
+    export type OnCoopServerMessageListener = (this: void, messageType: string, playerNick: string, steamID: string) => void;
     /**
      * Triggered when either a player or survivor is being created.
      *
      * @param playerOrSurvivor The player or survivor who's being created.
      * @param survivorDescription The survivor description of the player or survivor who's being created.
      */
-    export type OnCreateLivingCharacterListener = (
-        this: void,
-        playerOrSurvivor: zombie.characters.IsoPlayer | zombie.characters.IsoSurvivor,
-        survivorDescription: zombie.characters.SurvivorDesc
-    ) => void;
+    export type OnCreateLivingCharacterListener = (this: void, playerOrSurvivor: zombie.characters.IsoPlayer | zombie.characters.IsoSurvivor, survivorDescription: zombie.characters.SurvivorDesc) => void;
     /**
      * Triggered when a player is being created.
      *
@@ -541,26 +489,14 @@ declare module 'Events' {
      * @param line The line of text which the media device is displaying.
      * @param device The media device that is displaying the text.
      */
-    export type OnDeviceTextListener = (
-        this: void,
-        interactCodes: string,
-        x: number,
-        y: number,
-        z: number,
-        line: string,
-        device: zombie.iso.objects.IsoWaveSignal | zombie.inventory.types.Radio | zombie.vehicles.VehiclePart
-    ) => void;
+    export type OnDeviceTextListener = (this: void, interactCodes: string, x: number, y: number, z: number, line: string, device: zombie.iso.objects.IsoWaveSignal | zombie.inventory.types.Radio | zombie.vehicles.VehiclePart) => void;
     /**
      * Triggered when search mode is being disabled.
      *
      * @param player The player who's disabling search mode.
      * @param isSearchMode Whether search mode is being enabled or disabled.
      */
-    export type OnDisableSearchModeListener = (
-        this: void,
-        player: zombie.characters.IsoPlayer,
-        isSearchMode: boolean
-    ) => void;
+    export type OnDisableSearchModeListener = (this: void, player: zombie.characters.IsoPlayer, isSearchMode: boolean) => void;
     /**
      * Triggered when the player disconnects from the server.
      */
@@ -579,15 +515,7 @@ declare module 'Events' {
      * @param z The x coordinate of the tile being set.
      * @param square The grid square where the tile is being set.
      */
-    export type OnDoTileBuilding2Listener = (
-        this: void,
-        chunk: zombie.iso.IsoChunk,
-        render: boolean,
-        x: number,
-        y: number,
-        z: number,
-        square: zombie.iso.IsoGridSquare
-    ) => void;
+    export type OnDoTileBuilding2Listener = (this: void, chunk: zombie.iso.IsoChunk, render: boolean, x: number, y: number, z: number, square: zombie.iso.IsoGridSquare) => void;
     /**
      * Triggered when a building tile is being set.
      *
@@ -597,14 +525,7 @@ declare module 'Events' {
      * @param y The y coordinate of the tile being set.
      * @param z The z coordinate of the tile being set.
      */
-    export type OnDoTileBuilding3Listener = (
-        this: void,
-        chunk: zombie.iso.IsoChunk,
-        render: boolean,
-        x: number,
-        y: number,
-        z: number
-    ) => void;
+    export type OnDoTileBuilding3Listener = (this: void, chunk: zombie.iso.IsoChunk, render: boolean, x: number, y: number, z: number) => void;
     /**
      * Triggered at dusk.
      */
@@ -614,24 +535,14 @@ declare module 'Events' {
      *
      * @param movable The movable object resulting from using the recipe.
      */
-    export type OnDynamicMovableRecipeListener = (
-        this: void,
-        movable: zombie.inventory.types.Moveable,
-        movableRecipe: zombie.scripting.objects.MovableRecipe,
-        inventoryItem: zombie.inventory.InventoryItem,
-        character: zombie.characters.IsoGameCharacter
-    ) => void;
+    export type OnDynamicMovableRecipeListener = (this: void, movable: zombie.inventory.types.Moveable, movableRecipe: zombie.scripting.objects.MovableRecipe, inventoryItem: zombie.inventory.InventoryItem, character: zombie.characters.IsoGameCharacter) => void;
     /**
      * Triggered when search mode is being enabled.
      *
      * @param player The player who's enabling search mode.
      * @param isSearchMode Whether search mode is being enabled or disabled.
      */
-    export type OnEnableSearchModeListener = (
-        this: void,
-        player: zombie.characters.IsoPlayer,
-        isSearchMode: boolean
-    ) => void;
+    export type OnEnableSearchModeListener = (this: void, player: zombie.characters.IsoPlayer, isSearchMode: boolean) => void;
     /**
      * Triggered when a player successfully enters a vehicle.
      *
@@ -644,22 +555,14 @@ declare module 'Events' {
      * @param character The character who's equipping the item.
      * @param inventoryItem The item that is being equipped in the primary slot.
      */
-    export type OnEquipPrimaryListener = (
-        this: void,
-        character: zombie.characters.IsoGameCharacter,
-        inventoryItem: zombie.inventory.InventoryItem
-    ) => void;
+    export type OnEquipPrimaryListener = (this: void, character: zombie.characters.IsoGameCharacter, inventoryItem: zombie.inventory.InventoryItem) => void;
     /**
      * Triggered when a character equips an item in its secondary slot.
      *
      * @param character The character who's equipping the item.
      * @param inventoryItem The item that is being equipped in the secondary slot.
      */
-    export type OnEquipSecondaryListener = (
-        this: void,
-        character: zombie.characters.IsoGameCharacter,
-        inventoryItem: zombie.inventory.InventoryItem
-    ) => void;
+    export type OnEquipSecondaryListener = (this: void, character: zombie.characters.IsoGameCharacter, inventoryItem: zombie.inventory.InventoryItem) => void;
     /**
      * Triggered when a character is exiting a vehicle.
      *
@@ -679,12 +582,7 @@ declare module 'Events' {
      * @param containerType The type of the container that is being filled.
      * @param itemContainer The container that is being filled.
      */
-    export type OnFillContainerListener = (
-        this: void,
-        roomName: string,
-        containerType: string,
-        itemContainer: zombie.inventory.ItemContainer
-    ) => void;
+    export type OnFillContainerListener = (this: void, roomName: string, containerType: string, itemContainer: zombie.inventory.ItemContainer) => void;
     /**
      * Triggered when inventory object context menus are being filled.
      *
@@ -692,12 +590,7 @@ declare module 'Events' {
      * @param table The context menu to be filled.
      * @param items The items available in the player inventory.
      */
-    export type OnFillInventoryObjectContextMenuListener = (
-        this: void,
-        player: zombie.characters.IsoPlayer,
-        table: KahluaTable,
-        items: KahluaTable
-    ) => void;
+    export type OnFillInventoryObjectContextMenuListener = (this: void, player: zombie.characters.IsoPlayer, table: KahluaTable, items: KahluaTable) => void;
     /**
      * TODO
      *
@@ -713,13 +606,7 @@ declare module 'Events' {
      * @param worldObjects The world objects available nearby the player.
      * @param test Set to true if called for the purpose of testing for nearby objects.
      */
-    export type OnFillWorldObjectContextMenuListener = (
-        this: void,
-        player: zombie.characters.IsoPlayer,
-        context: KahluaTable,
-        worldObjects: KahluaTable,
-        test: boolean
-    ) => void;
+    export type OnFillWorldObjectContextMenuListener = (this: void, player: zombie.characters.IsoPlayer, context: KahluaTable, worldObjects: KahluaTable, test: boolean) => void;
     /**
      * Triggered when either a game or a server is being started, or when mods are getting reloaded during a game.
      */
@@ -757,12 +644,7 @@ declare module 'Events' {
      * @param rowID The row identifier of the table result.
      * @param tableName The name of the table result.
      */
-    export type OnGetTableResultListener = (
-        this: void,
-        result: java.util.ArrayList<any>,
-        rowID: number,
-        tableName: string
-    ) => void;
+    export type OnGetTableResultListener = (this: void, result: java.util.ArrayList<any>, rowID: number, tableName: string) => void;
     /**
      * Triggered when a grid square is burning.
      *
@@ -777,13 +659,7 @@ declare module 'Events' {
      * @param bodyPartType The body part where the zombie was hit.
      * @param handWeapon The hand weapon used to hit the zombie.
      */
-    export type OnHitZombieListener = (
-        this: void,
-        zombie: zombie.characters.IsoZombie,
-        character: zombie.characters.IsoGameCharacter,
-        bodyPartType: zombie.characters.BodyDamage.BodyPartType,
-        handWeapon: zombie.inventory.types.HandWeapon
-    ) => void;
+    export type OnHitZombieListener = (this: void, zombie: zombie.characters.IsoZombie, character: zombie.characters.IsoGameCharacter, bodyPartType: zombie.characters.BodyDamage.BodyPartType, handWeapon: zombie.inventory.types.HandWeapon) => void;
     /**
      * Triggered after GlobalModData has been initialized.
      *
@@ -797,12 +673,7 @@ declare module 'Events' {
      * @param stage The weather stage to be initialized.
      * @param strength (No documentation)
      */
-    export type OnInitModdedWeatherStageListener = (
-        this: void,
-        period: zombie.iso.weather.WeatherPeriod,
-        stage: zombie.iso.weather.WeatherPeriod$WeatherStage,
-        strength: number
-    ) => void;
+    export type OnInitModdedWeatherStageListener = (this: void, period: zombie.iso.weather.WeatherPeriod, stage: zombie.iso.weather.WeatherPeriod$WeatherStage, strength: number) => void;
     /**
      * Triggered when a media is being recorded.
      *
@@ -892,10 +763,7 @@ declare module 'Events' {
      *
      * @param spriteManager The sprite manager.
      */
-    export type OnLoadedTileDefinitionsListener = (
-        this: void,
-        spriteManager: zombie.iso.sprite.IsoSpriteManager
-    ) => void;
+    export type OnLoadedTileDefinitionsListener = (this: void, spriteManager: zombie.iso.sprite.IsoSpriteManager) => void;
     /**
      * Triggered when IsoWorld initialises and is registering the zones for the map.
      */
@@ -912,11 +780,7 @@ declare module 'Events' {
      * @param radioScriptManager The radio script manager.
      * @param worldInit True if the world has not yet been initialized.
      */
-    export type OnLoadRadioScriptsListener = (
-        this: void,
-        radioScriptManager: zombie.radio.scripting.RadioScriptManager,
-        worldInit: boolean
-    ) => void;
+    export type OnLoadRadioScriptsListener = (this: void, radioScriptManager: zombie.radio.scripting.RadioScriptManager, worldInit: boolean) => void;
     /**
      * Triggered when sound banks are loaded for the game.
      */
@@ -935,15 +799,7 @@ declare module 'Events' {
      * @param itemID The item identifier used to perform the mechanic action.
      * @param installing Whether the vehicle part is being installed or removed.
      */
-    export type OnMechanicActionDoneListener = (
-        this: void,
-        character: zombie.characters.IsoGameCharacter,
-        success: boolean,
-        vehicleID: number,
-        partID: string,
-        itemID: number,
-        installing: boolean
-    ) => void;
+    export type OnMechanicActionDoneListener = (this: void, character: zombie.characters.IsoGameCharacter, success: boolean, vehicleID: number, partID: string, itemID: number, installing: boolean) => void;
     /**
      * Triggered when the mini scoreboard is being updated.
      */
@@ -982,12 +838,7 @@ declare module 'Events' {
      * @param modData The ModData of this trigger.
      * @param BuildingDef The building definition of this trigger.
      */
-    export type OnMultiTriggerNPCEventListener = (
-        this: void,
-        triggerType: string,
-        modData: KahluaTable,
-        buildingDef: zombie.iso.BuildingDef
-    ) => void;
+    export type OnMultiTriggerNPCEventListener = (this: void, triggerType: string, modData: KahluaTable, buildingDef: zombie.iso.BuildingDef) => void;
     /**
      * Triggered when a fire starts.
      *
@@ -1019,15 +870,7 @@ declare module 'Events' {
      * @param character The character who's colliding with another object.
      * @param door The object that is being collided with.
      */
-    export type OnObjectCollideListener = (
-        this: void,
-        character: zombie.characters.IsoGameCharacter,
-        door:
-            | zombie.iso.objects.IsoDoor
-            | zombie.iso.objects.IsoThumpable
-            | zombie.iso.objects.IsoWindow
-            | zombie.characters.IsoZombie
-    ) => void;
+    export type OnObjectCollideListener = (this: void, character: zombie.characters.IsoGameCharacter, door: zombie.iso.objects.IsoDoor | zombie.iso.objects.IsoThumpable | zombie.iso.objects.IsoWindow | zombie.characters.IsoZombie) => void;
     /**
      * Triggered when left mouse button clicked on object
      *
@@ -1035,12 +878,7 @@ declare module 'Events' {
      * @param x The x coordinate where the left mouse button was pressed down.
      * @param y The y coordinate where the left mouse button was pressed down.
      */
-    export type OnObjectLeftMouseButtonDownListener = (
-        this: void,
-        object: zombie.iso.IsoObject,
-        x: number,
-        y: number
-    ) => void;
+    export type OnObjectLeftMouseButtonDownListener = (this: void, object: zombie.iso.IsoObject, x: number, y: number) => void;
     /**
      * Triggered when left mouse button is released on object.
      *
@@ -1048,12 +886,7 @@ declare module 'Events' {
      * @param x The x coordinate where the left mouse button was released.
      * @param y The y coordinate where the left mouse button was released.
      */
-    export type OnObjectLeftMouseButtonUpListener = (
-        this: void,
-        object: zombie.iso.IsoObject,
-        x: number,
-        y: number
-    ) => void;
+    export type OnObjectLeftMouseButtonUpListener = (this: void, object: zombie.iso.IsoObject, x: number, y: number) => void;
     /**
      * Triggered when right mouse button clicked on object.
      *
@@ -1061,12 +894,7 @@ declare module 'Events' {
      * @param x The x coordinate where the right mouse button was pressed down.
      * @param y The y coordinate where the right mouse button was pressed down.
      */
-    export type OnObjectRightMouseButtonDownListener = (
-        this: void,
-        object: zombie.iso.IsoObject,
-        x: number,
-        y: number
-    ) => void;
+    export type OnObjectRightMouseButtonDownListener = (this: void, object: zombie.iso.IsoObject, x: number, y: number) => void;
     /**
      * Triggered when right mouse button is released on object.
      *
@@ -1074,23 +902,14 @@ declare module 'Events' {
      * @param x The x coordinate where the right mouse button was released.
      * @param y The y coordinate where the right mouse button was released.
      */
-    export type OnObjectRightMouseButtonUpListener = (
-        this: void,
-        object: zombie.iso.IsoObject,
-        x: number,
-        y: number
-    ) => void;
+    export type OnObjectRightMouseButtonUpListener = (this: void, object: zombie.iso.IsoObject, x: number, y: number) => void;
     /**
      * Triggered when a character is done performing an attack.
      *
      * @param character The character who's finished attacking.
      * @param handWeapon The hand weapon used to perform the attack.
      */
-    export type OnPlayerAttackFinishedListener = (
-        this: void,
-        character: zombie.characters.IsoGameCharacter,
-        handWeapon: zombie.inventory.types.HandWeapon
-    ) => void;
+    export type OnPlayerAttackFinishedListener = (this: void, character: zombie.characters.IsoGameCharacter, handWeapon: zombie.inventory.types.HandWeapon) => void;
     /**
      * Triggered when a player dies.
      *
@@ -1150,12 +969,7 @@ declare module 'Events' {
      * @param context The context menu to be filled.
      * @param items The items available in the player inventory.
      */
-    export type OnPreFillInventoryObjectContextMenuListener = (
-        this: void,
-        player: zombie.characters.IsoPlayer,
-        context: KahluaTable,
-        items: KahluaTable
-    ) => void;
+    export type OnPreFillInventoryObjectContextMenuListener = (this: void, player: zombie.characters.IsoPlayer, context: KahluaTable, items: KahluaTable) => void;
     /**
      * Triggered before context menu for world objects is filled.
      *
@@ -1164,13 +978,7 @@ declare module 'Events' {
      * @param worldObjects The world objects available nearby the player.
      * @param test True if called for the purpose of testing for nearby objects.
      */
-    export type OnPreFillWorldObjectContextMenuListener = (
-        this: void,
-        player: zombie.characters.IsoPlayer,
-        context: KahluaTable,
-        worldObjects: KahluaTable,
-        test: boolean
-    ) => void;
+    export type OnPreFillWorldObjectContextMenuListener = (this: void, player: zombie.characters.IsoPlayer, context: KahluaTable, worldObjects: KahluaTable, test: boolean) => void;
     /**
      * Triggered before a map is loaded.
      */
@@ -1181,22 +989,14 @@ declare module 'Events' {
      * @param player The player who's racking the firearm.
      * @param firearm The firearm which is being racked.
      */
-    export type OnPressRackButtonListener = (
-        this: void,
-        player: zombie.characters.IsoPlayer,
-        firearm: zombie.inventory.types.HandWeapon
-    ) => void;
+    export type OnPressRackButtonListener = (this: void, player: zombie.characters.IsoPlayer, firearm: zombie.inventory.types.HandWeapon) => void;
     /**
      * Triggered when a player hits the button to reload a firearm.
      *
      * @param player The player who's reloading the firearm.
      * @param firearm The firearm which is being reloaded.
      */
-    export type OnPressReloadButtonListener = (
-        this: void,
-        player: zombie.characters.IsoPlayer,
-        firearm: zombie.inventory.types.HandWeapon
-    ) => void;
+    export type OnPressReloadButtonListener = (this: void, player: zombie.characters.IsoPlayer, firearm: zombie.inventory.types.HandWeapon) => void;
     /**
      * Triggered by UI Manager in its render function before the UI gets drawn.
      */
@@ -1221,14 +1021,7 @@ declare module 'Events' {
      * @param sessionID The session identifier for the transaction.
      * @param custom TODO
      */
-    export type OnReceiveItemListNetListener = (
-        this: void,
-        sender: zombie.characters.IsoPlayer,
-        itemList: java.util.ArrayList<any>,
-        receiver: zombie.characters.IsoPlayer,
-        sessionID: string,
-        custom: string
-    ) => void;
+    export type OnReceiveItemListNetListener = (this: void, sender: zombie.characters.IsoPlayer, itemList: java.util.ArrayList<any>, receiver: zombie.characters.IsoPlayer, sessionID: string, custom: string) => void;
     /**
      * Triggered when the game client is receiving user log from the server.
      *
@@ -1261,13 +1054,7 @@ declare module 'Events' {
      * @param newWidth The new width of the screen.
      * @param newHeight The new height of the screen.
      */
-    export type OnResolutionChangeListener = (
-        this: void,
-        oldWidth: number,
-        oldHeight: number,
-        newWidth: number,
-        newHeight: number
-    ) => void;
+    export type OnResolutionChangeListener = (this: void, oldWidth: number, oldHeight: number, newWidth: number, newHeight: number) => void;
     /**
      * Triggered when right mouse button is down.
      *
@@ -1297,12 +1084,7 @@ declare module 'Events' {
      * @param displayName The list of display names for the players which are being updated on the score board.
      * @param steamIDs The list of Steam identifiers of the players which are being updated on the score board.
      */
-    export type OnScoreboardUpdateListener = (
-        this: void,
-        playerNames: java.util.ArrayList<string>,
-        displayNames: java.util.ArrayList<string>,
-        steamIDs: java.util.ArrayList<string>
-    ) => void;
+    export type OnScoreboardUpdateListener = (this: void, playerNames: java.util.ArrayList<string>, displayNames: java.util.ArrayList<string>, steamIDs: java.util.ArrayList<string>) => void;
     /**
      * Triggered for each room about to get spawned, the first time a character gets close enough to the building where the room is located.
      *
@@ -1341,13 +1123,7 @@ declare module 'Events' {
      * @param data2 TODO
      * @param data3 TODO
      */
-    export type OnServerWorkshopItemsListener = (
-        this: void,
-        state: string,
-        data: java.util.ArrayList<any | number | string>,
-        data2: number | string,
-        data3: number
-    ) => void;
+    export type OnServerWorkshopItemsListener = (this: void, state: string, data: java.util.ArrayList<any | number | string>, data2: number | string, data3: number) => void;
     /**
      * Triggered when the default chat tab has been set.
      *
@@ -1385,12 +1161,7 @@ declare module 'Events' {
      * @param port TODO
      * @param rulesTable TODO
      */
-    export type OnSteamRulesRefreshCompleteListener = (
-        this: void,
-        host: string,
-        port: number,
-        rulesTable: KahluaTable
-    ) => void;
+    export type OnSteamRulesRefreshCompleteListener = (this: void, host: string, port: number, rulesTable: KahluaTable) => void;
     /**
      * TODO
      *
@@ -1411,23 +1182,14 @@ declare module 'Events' {
      * @param port TODO
      * @param server TODO
      */
-    export type OnSteamServerResponded2Listener = (
-        this: void,
-        host: string,
-        port: number,
-        server: zombie.network.Server
-    ) => void;
+    export type OnSteamServerResponded2Listener = (this: void, host: string, port: number, server: zombie.network.Server) => void;
     /**
      * Triggered after a new Steam workshop item was successfully created.
      *
      * @param steamID The Steam identifier of the user who created the workshop item.
      * @param userNeedsToAcceptWorkshopLegalAgreement Whether the user has to accept the workshop legal agreement.
      */
-    export type OnSteamWorkshopItemCreatedListener = (
-        this: void,
-        steamID: string,
-        userNeedsToAcceptWorkshopLegalAgreement: boolean
-    ) => void;
+    export type OnSteamWorkshopItemCreatedListener = (this: void, steamID: string, userNeedsToAcceptWorkshopLegalAgreement: boolean) => void;
     /**
      * Triggered when a Steam workshop item couldn't be created.
      *
@@ -1445,10 +1207,7 @@ declare module 'Events' {
      *
      * @param userNeedsToAcceptWorkshopLegalAgreement Whether the user has to accept the workshop legal agreement.
      */
-    export type OnSteamWorkshopItemUpdatedListener = (
-        this: void,
-        userNeedsToAcceptWorkshopLegalAgreement: boolean
-    ) => void;
+    export type OnSteamWorkshopItemUpdatedListener = (this: void, userNeedsToAcceptWorkshopLegalAgreement: boolean) => void;
     /**
      * Triggered when a character is switching seat in a vehicle.
      *
@@ -1478,14 +1237,7 @@ declare module 'Events' {
      * @param light Whether the thunder event will emit light.
      * @param rumble Whether the thunder event will rumble.
      */
-    export type OnThunderEventListener = (
-        this: void,
-        x: number,
-        y: number,
-        strike: boolean,
-        light: boolean,
-        rumble: boolean
-    ) => void;
+    export type OnThunderEventListener = (this: void, x: number, y: number, strike: boolean, light: boolean, rumble: boolean) => void;
     /**
      * Triggered every tick, try to not use this one, use EveryTenMinutes instead because it can create a lot of frame loss/garbage collection.
      *
@@ -1510,11 +1262,7 @@ declare module 'Events' {
      * @param player The player who's toggling search mode.
      * @param isSearchMode Whether search mode is being enabled or disabled.
      */
-    export type OnToggleSearchModeListener = (
-        this: void,
-        player: zombie.characters.IsoPlayer,
-        isSearchMode: boolean
-    ) => void;
+    export type OnToggleSearchModeListener = (this: void, player: zombie.characters.IsoPlayer, isSearchMode: boolean) => void;
     /**
      * Called when a player enters the trigger area of a NPC event.
      *
@@ -1522,12 +1270,7 @@ declare module 'Events' {
      * @param modData The ModData of this trigger.
      * @param buildingDefinition The building definition of this trigger.
      */
-    export type OnTriggerNPCEventListener = (
-        this: void,
-        triggerType: string,
-        modData: KahluaTable,
-        buildingDefinition: zombie.iso.BuildingDef
-    ) => void;
+    export type OnTriggerNPCEventListener = (this: void, triggerType: string, modData: KahluaTable, buildingDefinition: zombie.iso.BuildingDef) => void;
     /**
      * TODO
      */
@@ -1539,12 +1282,7 @@ declare module 'Events' {
      * @param stage The current stage of the weather.
      * @param strength The strength of the air front.
      */
-    export type OnUpdateModdedWeatherStageListener = (
-        this: void,
-        period: zombie.iso.weather.WeatherPeriod,
-        stage: zombie.iso.weather.WeatherPeriod$WeatherStage,
-        strength: number
-    ) => void;
+    export type OnUpdateModdedWeatherStageListener = (this: void, period: zombie.iso.weather.WeatherPeriod, stage: zombie.iso.weather.WeatherPeriod$WeatherStage, strength: number) => void;
     /**
      * Triggered when a character is using a vehicle.
      *
@@ -1552,12 +1290,7 @@ declare module 'Events' {
      * @param baseVehicle The vehicle which the player is driving.
      * @param pressedNotTapped Whether the player had been keeping the accelerator pressed or if it was just a tap.
      */
-    export type OnUseVehicleListener = (
-        this: void,
-        player: zombie.characters.IsoPlayer,
-        baseVehicle: zombie.vehicles.BaseVehicle,
-        pressedNotTapped: boolean
-    ) => void;
+    export type OnUseVehicleListener = (this: void, player: zombie.characters.IsoPlayer, baseVehicle: zombie.vehicles.BaseVehicle, pressedNotTapped: boolean) => void;
     /**
      * Triggered when the texture of a vehicle part is changed after being damaged.
      *
@@ -1571,12 +1304,7 @@ declare module 'Events' {
      * @param baseVehicle The vehicle that the player is driving.
      * @param pressed Whether the vehicle horn is being pressed.
      */
-    export type OnVehicleHornListener = (
-        this: void,
-        player: zombie.characters.IsoPlayer,
-        baseVehicle: zombie.vehicles.BaseVehicle,
-        pressed: boolean
-    ) => void;
+    export type OnVehicleHornListener = (this: void, player: zombie.characters.IsoPlayer, baseVehicle: zombie.vehicles.BaseVehicle, pressed: boolean) => void;
     /**
      * Triggered when the amount of water in an object has changed.
      *
@@ -1592,24 +1320,14 @@ declare module 'Events' {
      * @param handWeapon The hand weapon used to hit the character.
      * @param damage The damage inflicted to the character who's been hit.
      */
-    export type OnWeaponHitCharacterListener = (
-        this: void,
-        wielder: zombie.characters.IsoGameCharacter,
-        character: zombie.characters.IsoGameCharacter,
-        handWeapon: zombie.inventory.types.HandWeapon,
-        damage: number
-    ) => void;
+    export type OnWeaponHitCharacterListener = (this: void, wielder: zombie.characters.IsoGameCharacter, character: zombie.characters.IsoGameCharacter, handWeapon: zombie.inventory.types.HandWeapon, damage: number) => void;
     /**
      * Triggered when a character hits a tree with a hand weapon.
      *
      * @param character The character whose weapon hit a tree.
      * @param handWeapon The hand weapon used to hit the tree.
      */
-    export type OnWeaponHitTreeListener = (
-        this: void,
-        character: zombie.characters.IsoGameCharacter,
-        handWeapon: zombie.inventory.types.HandWeapon
-    ) => void;
+    export type OnWeaponHitTreeListener = (this: void, character: zombie.characters.IsoGameCharacter, handWeapon: zombie.inventory.types.HandWeapon) => void;
     /**
      * Triggered when a player is gaining XP for a successful hit.
      *
@@ -1618,35 +1336,21 @@ declare module 'Events' {
      * @param character The character who's being hit.
      * @param damageSplit The damage split of the hit.
      */
-    export type OnWeaponHitXPListener = (
-        this: void,
-        player: zombie.characters.IsoPlayer,
-        handWeapon: zombie.inventory.types.HandWeapon,
-        character: zombie.characters.IsoGameCharacter,
-        damageSplit: number
-    ) => void;
+    export type OnWeaponHitXPListener = (this: void, player: zombie.characters.IsoPlayer, handWeapon: zombie.inventory.types.HandWeapon, character: zombie.characters.IsoGameCharacter, damageSplit: number) => void;
     /**
      * Triggered when a player swings a hand weapon.
      *
      * @param character The character who's wielding the weapon.
      * @param handWeapon The hand weapon that is being wielded.
      */
-    export type OnWeaponSwingListener = (
-        this: void,
-        character: zombie.characters.IsoGameCharacter,
-        handWeapon: zombie.inventory.types.HandWeapon
-    ) => void;
+    export type OnWeaponSwingListener = (this: void, character: zombie.characters.IsoGameCharacter, handWeapon: zombie.inventory.types.HandWeapon) => void;
     /**
      * Triggered when a hand weapon has reached the apex of its swing.
      *
      * @param character The character who's wielding the weapon.
      * @param handWeapon The hand weapon that is being wielded.
      */
-    export type OnWeaponSwingHitPointListener = (
-        this: void,
-        character: zombie.characters.IsoGameCharacter,
-        handWeapon: zombie.inventory.types.HandWeapon
-    ) => void;
+    export type OnWeaponSwingHitPointListener = (this: void, character: zombie.characters.IsoGameCharacter, handWeapon: zombie.inventory.types.HandWeapon) => void;
     /**
      * Triggered when a weather period is complete.
      *
@@ -1681,15 +1385,7 @@ declare module 'Events' {
      * @param volume The volume of the sound.
      * @param source The object that triggered the sound.
      */
-    export type OnWorldSoundListener = (
-        this: void,
-        x: number,
-        y: number,
-        z: number,
-        radius: number,
-        volume: number,
-        source: zombie.iso.IsoObject
-    ) => void;
+    export type OnWorldSoundListener = (this: void, x: number, y: number, z: number, radius: number, volume: number, source: zombie.iso.IsoObject) => void;
     /**
      * Triggered when a zombie dies.
      *
@@ -1739,11 +1435,7 @@ declare module 'Events' {
      * @param safeHouse The safehouse for which the player received an invitation.
      * @param playerName The name of the player who's been invited to join the safehouse.
      */
-    export type ReceiveSafehouseInviteListener = (
-        this: void,
-        safeHouse: zombie.iso.areas.SafeHouse,
-        playerName: string
-    ) => void;
+    export type ReceiveSafehouseInviteListener = (this: void, safeHouse: zombie.iso.areas.SafeHouse, playerName: string) => void;
     /**
      * Triggered when a character is requesting a trade with another character.
      *
@@ -1783,33 +1475,21 @@ declare module 'Events' {
      * @param player The player who's adding an item to the trade.
      * @param inventoryItem The item which the player is adding to the trade.
      */
-    export type TradingUIAddItemListener = (
-        this: void,
-        player: zombie.characters.IsoPlayer,
-        inventoryItem: zombie.inventory.InventoryItem
-    ) => void;
+    export type TradingUIAddItemListener = (this: void, player: zombie.characters.IsoPlayer, inventoryItem: zombie.inventory.InventoryItem) => void;
     /**
      * Triggered when a player removes an item from a trade.
      *
      * @param player The player who's removing an item from the trade.
      * @param itemIndex The index of the item that the player is removing from the trade.
      */
-    export type TradingUIRemoveItemListener = (
-        this: void,
-        player: zombie.characters.IsoPlayer,
-        itemIndex: number
-    ) => void;
+    export type TradingUIRemoveItemListener = (this: void, player: zombie.characters.IsoPlayer, itemIndex: number) => void;
     /**
      * Triggered when a player updates the item state of a trade.
      *
      * @param player The player who's updating an item.
      * @param itemIndex The index of the item that the player is updating.
      */
-    export type TradingUIUpdateStateListener = (
-        this: void,
-        player: zombie.characters.IsoPlayer,
-        itemIndex: number
-    ) => void;
+    export type TradingUIUpdateStateListener = (this: void, player: zombie.characters.IsoPlayer, itemIndex: number) => void;
     /**
      * Triggered when the game client is receiving tickets from the server.
      *
