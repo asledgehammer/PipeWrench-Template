@@ -19,6 +19,11 @@ npm run dev
 npm run compile
 ```
 
+(Manually compile TypeScript declarations)
+```
+npm run export
+```
+
 (Clean)
 ```
 npm run clean
