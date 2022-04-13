@@ -97,12 +97,28 @@ var main = function () {
     }
     compileProject();
 };
+var copyNonCompileFilesInDir = function (srcDir, dstDir) {
+    var files = fs.readdirSync(srcDir);
+    for (var _i = 0, files_1 = files; _i < files_1.length; _i++) {
+        var file = files_1[_i];
+        if (file.toLowerCase().endsWith('.ts'))
+            continue;
+        var path = "".concat(srcDir, "/").concat(file);
+        var lstat = fs.lstatSync(path);
+        if (lstat.isDirectory()) {
+            copyNonCompileFilesInDir(path, path.replace(srcDir, dstDir));
+        }
+        else {
+            copyFile(path, path.replace(srcDir, dstDir));
+        }
+    }
+};
 var copyFile = function (src, dst) {
     cursor.grey();
     console.log("".concat(PREFIX, " - Copying \"").concat(src, "\" to \"").concat(dst, "\".."));
     cursor.reset();
     checkDir(dst);
-    if (dst.toLowerCase().endsWith('.lua')) {
+    if (dst.toLowerCase().endsWith('.lua') && !dst.toLowerCase().endsWith('shared/zomboid.lua') && !dst.toLowerCase().endsWith('shared/events.lua')) {
         var lua = (LUA_HEADER_FILE.length !== 0 ? LUA_HEADER_FILE + '\n' : '') +
             fs.readFileSync(src).toString() +
             (LUA_FOOTER_FILE.length !== 0 ? '\n' + LUA_FOOTER_FILE : '');
@@ -114,9 +130,12 @@ var copyFile = function (src, dst) {
 };
 var compileProject = function () {
     cursor.brightGreen();
-    process.stdout.write("".concat(PREFIX, " - Compiling project.."));
+    process.stdout.write("".concat(PREFIX, " - Compiling project..\n"));
     cursor.reset();
     var timeThen = new Date().getTime();
+    copyNonCompileFilesInDir('./src/client', './media/lua/client');
+    copyNonCompileFilesInDir('./src/server', './media/lua/server');
+    copyNonCompileFilesInDir('./src/shared', './media/lua/shared');
     (0, typescript_to_lua_1.transpileProject)('tsconfig.json', {}, function (fileName, data, _writeByteOrderMark, _onError) {
         while (fileName.indexOf('\\') !== -1)
             fileName = fileName.replace('\\', '/');
@@ -159,7 +178,7 @@ var compileProject = function () {
     var timeDelta = timeNow - timeThen;
     var timeSeconds = timeDelta / 1000;
     cursor.brightGreen();
-    process.stdout.write(" Complete. Took ".concat(timeSeconds, " second(s).\n"));
+    process.stdout.write("".concat(PREFIX, " - Compilation complete. Took ").concat(timeSeconds, " second(s).\n"));
     cursor.reset();
 };
 var checkDir = function (file) {
@@ -174,17 +193,6 @@ var checkDir = function (file) {
 var fixRequire = function (scope, lua) {
     var fix = function (fromImport) {
         var toImport = fromImport.replace('.', '/');
-        // let split = toImport.split('.');
-        // if(split.length) {
-        //     if(split.length === 1) {
-        //         toImport = split[0];
-        //     } else {
-        //         toImport = split[1];
-        //         for(let i = 2; i < split.length; i++) {
-        //             toImport += '.' + split[i];
-        //         }
-        //     }
-        // }
         // Remove cross-references for client/server/shared.
         if (toImport.startsWith('shared/')) {
             toImport = toImport.substring('shared/'.length);
