@@ -1,2 +1,0 @@
---- This is an example footer. This will be pasted in all generated
---- & copied Lua files.

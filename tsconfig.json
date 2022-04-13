@@ -2,6 +2,7 @@
   "compilerOptions": {
     "allowSyntheticDefaultImports": true,
     "declaration": true,
+    "emitDeclarationOnly": true,
     "experimentalDecorators": true,
     "lib":["ESNext", "DOM"],
     "module":"ESNext",
@@ -10,7 +11,11 @@
     "rootDirs": ["./src/shared", "./src/client", "./src/server"],
     "strict": true,
     "target":"ESNext",
-    "typeRoots": ["node_modules/@types", "./typings"],
+    "typeRoots": ["node_modules/@types", "lua-types/5.1", "./typings"],
+    "types": ["lua-types/5.1"]
+  },
+  "tstl": {
+    "noHeader": true
   },
   "exclude": ["node_modules"],
   "include": ["./typings/**/*.ts", "src/shared/**/*.ts", "src/client/**/*.ts", "src/server/**/*.ts", "node_modules/lua_types/5.1.d.ts"]

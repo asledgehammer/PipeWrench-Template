@@ -5,23 +5,62 @@
  * (Designed for the Project Zomboid environment)
  *
  * TODO: Create declaration files.
- * TODO: Manual copying of Lua files from src/ to media/
  *
  * @author JabDoesThings
  */
 exports.__esModule = true;
 var ansi = require('ansi');
 var cursor = ansi(process.stdout);
+var child_process = require("child_process");
 var fs = require("fs");
 var chokidar = require("chokidar");
 var typescript_to_lua_1 = require("typescript-to-lua");
 var PREFIX = '[COMPILER]';
 var LUA_HEADER_FILE = '';
-if (fs.existsSync('./src/header.lua'))
-    LUA_HEADER_FILE = fs.readFileSync('./src/header.lua').toString();
+if (fs.existsSync('./src/header.txt'))
+    LUA_HEADER_FILE = fs.readFileSync('./src/header.txt').toString();
 var LUA_FOOTER_FILE = '';
-if (fs.existsSync('./src/footer.lua'))
-    LUA_FOOTER_FILE = fs.readFileSync('./src/footer.lua').toString();
+if (fs.existsSync('./src/footer.txt'))
+    LUA_FOOTER_FILE = fs.readFileSync('./src/footer.txt').toString();
+var getModInfo = function () {
+    var modInfo = { id: null, name: null, poster: null, description: null, require: [] };
+    var modInfoFile = fs.readFileSync('./mod.info').toString();
+    var lines = modInfoFile.split('\r\n');
+    for (var _i = 0, lines_1 = lines; _i < lines_1.length; _i++) {
+        var line = lines_1[_i];
+        var lower = line.toLowerCase();
+        if (lower.indexOf('id=') !== -1) {
+            modInfo.id = line.split('=')[1].trim();
+        }
+        else if (lower.indexOf('name=') !== -1) {
+            modInfo.name = line.split('=')[1].trim();
+        }
+        else if (lower.indexOf('description=') !== -1) {
+            modInfo.description = line.split('=')[1].trim();
+        }
+        else if (lower.indexOf('poster=') !== -1) {
+            modInfo.poster = line.split('=')[1].trim();
+        }
+        else if (lower.indexOf('require=') !== -1) {
+            modInfo.require = line
+                .split('=')[1]
+                .trim()
+                .split(',')
+                .map(function (entry) {
+                return entry.trim();
+            });
+        }
+    }
+    if (modInfo.id == null)
+        throw new Error('mod.info has no id.');
+    if (modInfo.name == null)
+        throw new Error('mod.info has no name.');
+    if (modInfo.poster == null)
+        throw new Error('mod.info has no poster.');
+    if (modInfo.description == null)
+        throw new Error('mod.info has no description.');
+    return modInfo;
+};
 var main = function () {
     if (!fs.existsSync('./media/lua'))
         fs.mkdirSync('./media/lua', { recursive: true });
@@ -31,6 +70,8 @@ var main = function () {
         fs.mkdirSync('./media/lua/server', { recursive: true });
     if (!fs.existsSync('./media/lua/shared'))
         fs.mkdirSync('./media/lua/shared', { recursive: true });
+    if (!fs.existsSync('./dst'))
+        fs.mkdirSync('./dst', { recursive: true });
     var args = process.argv.reverse();
     args.pop();
     args.pop();
@@ -118,10 +159,30 @@ var copyFile = function (src, dst) {
     console.log("".concat(PREFIX, " - Copying \"").concat(src, "\" to \"").concat(dst, "\".."));
     cursor.reset();
     checkDir(dst);
-    if (dst.toLowerCase().endsWith('.lua') && !dst.toLowerCase().endsWith('shared/zomboid.lua') && !dst.toLowerCase().endsWith('shared/events.lua')) {
-        var lua = (LUA_HEADER_FILE.length !== 0 ? LUA_HEADER_FILE + '\n' : '') +
-            fs.readFileSync(src).toString() +
-            (LUA_FOOTER_FILE.length !== 0 ? '\n' + LUA_FOOTER_FILE : '');
+    if (dst.toLowerCase().endsWith('.lua') &&
+        !dst.toLowerCase().endsWith('shared/zomboid.lua') &&
+        !dst.toLowerCase().endsWith('shared/events.lua')) {
+        var lua = fs.readFileSync(src).toString();
+        if (LUA_HEADER_FILE.length !== 0) {
+            var lines = [];
+            var header = LUA_HEADER_FILE.split('\r\n');
+            for (var index = 0; index < header.length; index++) {
+                if (index === header.length - 1 && header[index].length === 0)
+                    continue;
+                lines.push("--- ".concat(header[index]));
+            }
+            lua = lines.join('\r\n') + "\r\n\r\n".concat(lua);
+        }
+        if (LUA_FOOTER_FILE.length !== 0) {
+            var lines = [];
+            var footer = LUA_FOOTER_FILE.split('\r\n');
+            for (var index = 0; index < footer.length; index++) {
+                if (index === footer.length - 1 && footer[index].length === 0)
+                    continue;
+                lines.push("--- ".concat(footer[index]));
+            }
+            lua += '\r\n' + lines.join('\r\n');
+        }
         fs.writeFileSync(dst, lua);
     }
     else {
@@ -136,7 +197,7 @@ var compileProject = function () {
     copyNonCompileFilesInDir('./src/client', './media/lua/client');
     copyNonCompileFilesInDir('./src/server', './media/lua/server');
     copyNonCompileFilesInDir('./src/shared', './media/lua/shared');
-    (0, typescript_to_lua_1.transpileProject)('tsconfig.json', {}, function (fileName, data, _writeByteOrderMark, _onError) {
+    (0, typescript_to_lua_1.transpileProject)('tsconfig.json', { emitDeclarationOnly: false }, function (fileName, data, _writeByteOrderMark, _onError) {
         while (fileName.indexOf('\\') !== -1)
             fileName = fileName.replace('\\', '/');
         if (fileName.endsWith('.d.ts')) {
@@ -154,7 +215,9 @@ var compileProject = function () {
                 subFileName = 'media/lua/' + fileName.substring(indexOf + splitter.length);
             }
             var lua = void 0;
-            if (subFileName.endsWith('lualib_bundle.lua')) {
+            if (subFileName.endsWith('lualib_bundle.lua') ||
+                subFileName.endsWith('Zomboid.lua') ||
+                subFileName.endsWith('Events.lua')) {
                 lua = data;
             }
             else {
@@ -165,21 +228,100 @@ var compileProject = function () {
                     scope = 'server';
                 else if (subFileName.startsWith('media/lua/shared'))
                     scope = 'shared';
-                lua =
-                    (LUA_HEADER_FILE.length !== 0 ? LUA_HEADER_FILE + '\n' : '') +
-                        fixRequire(scope, data) +
-                        (LUA_FOOTER_FILE.length !== 0 ? '\n' + LUA_FOOTER_FILE : '');
+                lua = data;
+                if (LUA_HEADER_FILE.length !== 0) {
+                    var lines = [];
+                    var header = LUA_HEADER_FILE.split('\r\n');
+                    for (var index = 0; index < header.length; index++) {
+                        if (index === header.length - 1 && header[index].length === 0)
+                            continue;
+                        lines.push("--- ".concat(header[index]));
+                    }
+                    lua = lines.join('\r\n') + "\r\n\r\n".concat(lua);
+                }
+                if (LUA_FOOTER_FILE.length !== 0) {
+                    var lines = [];
+                    var footer = LUA_FOOTER_FILE.split('\r\n');
+                    for (var index = 0; index < footer.length; index++) {
+                        if (index === footer.length - 1 && footer[index].length === 0)
+                            continue;
+                        lines.push("--- ".concat(footer[index]));
+                    }
+                    lua += '\r\n' + lines.join('\r\n');
+                }
             }
             checkDir(subFileName);
             fs.writeFileSync(subFileName, lua);
         }
     });
+    compileProjectDeclaration();
     var timeNow = new Date().getTime();
     var timeDelta = timeNow - timeThen;
     var timeSeconds = timeDelta / 1000;
     cursor.brightGreen();
     process.stdout.write("".concat(PREFIX, " - Compilation complete. Took ").concat(timeSeconds, " second(s).\n"));
     cursor.reset();
+};
+var compileProjectDeclaration = function () {
+    var modInfo = getModInfo();
+    var fileName = "./dst/".concat(modInfo.id, ".d.ts");
+    cursor.brightGreen();
+    console.log("".concat(PREFIX, " - Compiling project declarations.. (file: ").concat(fileName, ")"));
+    cursor.reset();
+    child_process.execSync("npx tsc --declaration --outFile ".concat(fileName));
+    cursor.brightGreen();
+    console.log("".concat(PREFIX, " - Refactoring project declarations.."));
+    cursor.reset();
+    var lines = fs.readFileSync(fileName).toString().split('\r\n');
+    lines = lines.reverse();
+    if (LUA_HEADER_FILE.length !== 0) {
+        lines.push('');
+        var header = LUA_HEADER_FILE.split('\r\n');
+        header = header.reverse();
+        for (var index = 0; index < header.length; index++) {
+            if (index === header.length - 1 && header[index].length === 0)
+                continue;
+            lines.push("// ".concat(header[index]));
+        }
+    }
+    lines.push('');
+    lines.push('/** @noResolution @noSelfInFile */');
+    lines = lines.reverse();
+    for (var index = 0; index < lines.length; index++) {
+        var line = lines[index];
+        // Module declarations in d.ts file.
+        if (line.indexOf('declare module "client/') !== -1) {
+            line = line.replace('declare module "client/', 'declare module "');
+        }
+        else if (line.indexOf('declare module "server/') !== -1) {
+            line = line.replace('declare module "server/', 'declare module "');
+        }
+        else if (line.indexOf('declare module "shared/') !== -1) {
+            line = line.replace('declare module "shared/', 'declare module "');
+        }
+        // Imports in d.ts file.
+        if (line.indexOf('from "client/') !== -1)
+            line = line.replace('from "client/', 'from "');
+        else if (line.indexOf('from "server/') !== -1)
+            line = line.replace('from "server/', 'from "');
+        else if (line.indexOf('from "shared/') !== -1)
+            line = line.replace('from "shared/', 'from "');
+        // Cut out useless declarations that are empty.
+        if (line.indexOf('declare module ') !== -1 && line.indexOf('{ }') !== -1) {
+            lines.splice(index--, 1);
+            continue;
+        }
+        lines[index] = line;
+    }
+    if (LUA_FOOTER_FILE.length !== 0) {
+        var footer = LUA_FOOTER_FILE.split('\r\n');
+        for (var index = 0; index < footer.length; index++) {
+            if (index === footer.length - 1 && footer[index].length === 0)
+                continue;
+            lines.push("// ".concat(footer[index]));
+        }
+    }
+    fs.writeFileSync(fileName, lines.join('\r\n'));
 };
 var checkDir = function (file) {
     var split = file.split('/');

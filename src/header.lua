@@ -1,5 +1,0 @@
---- This is an example header. This will be pasted in all generated
---- & copied Lua files. 
---- 
---- @author [Place author here]
---- @license [Place license here]
