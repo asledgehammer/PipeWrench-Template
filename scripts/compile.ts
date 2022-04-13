@@ -128,6 +128,9 @@
                      }
                  }
              });
+         } else if(argLower === '-d' ||argLower === '--declarations') {
+             compileProjectDeclaration();
+             return;
          }
      }
      compileProject();

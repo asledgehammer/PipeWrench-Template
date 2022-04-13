@@ -7,6 +7,7 @@
     "clean": "del-cli --force ./media/lua ./dst",
     "build-scripts": "tsc scripts/compile.ts",
     "compile": "node scripts/compile.js",
+    "export": "node scripts/compile.js --declarations",
     "dev": "node scripts/compile.js --watch"
   },
   "repository": {
