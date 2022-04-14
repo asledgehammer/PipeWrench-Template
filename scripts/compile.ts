@@ -128,12 +128,33 @@
                      }
                  }
              });
-         } else if(argLower === '-d' ||argLower === '--declarations') {
+         } else if (argLower === '-d' || argLower === '--declarations') {
              compileProjectDeclaration();
              return;
          }
      }
      compileProject();
+ };
+ 
+ const getFiles = (srcDir: string, extension: string): { [path: string]: string } => {
+     const toReturn = {};
+     const files = fs.readdirSync(srcDir);
+     const ext = `.${extension.toLowerCase()}`;
+     for (const file of files) {
+         const path = `${srcDir}/${file}`;
+         const lstat = fs.lstatSync(path);
+         if (lstat.isDirectory()) {
+             const dirFiles = getFiles(path, extension);
+             for (const path of Object.keys(dirFiles)) {
+                 toReturn[path] = dirFiles[path];
+             }
+         } else {
+             if (!file.toLowerCase().endsWith(ext)) continue;
+             toReturn[path] = fs.readFileSync(path).toString();
+         }
+     }
+ 
+     return toReturn;
  };
  
  const copyNonCompileFilesInDir = (srcDir: string, dstDir: string) => {
@@ -200,7 +221,11 @@
          'tsconfig.json',
          { emitDeclarationOnly: false },
          (fileName: string, data: string, _writeByteOrderMark: boolean, _onError?: (message: string) => void) => {
-             while (fileName.indexOf('\\') !== -1) fileName = fileName.replace('\\', '/');
+
+            // Ignore empty files.
+            if(data.length === 0) return; 
+            
+            while (fileName.indexOf('\\') !== -1) fileName = fileName.replace('\\', '/');
              if (fileName.endsWith('.d.ts')) {
                  // Let's figure out what to do for declarations later.
                  return;
@@ -227,7 +252,7 @@
                      else if (subFileName.startsWith('media/lua/server')) scope = 'server';
                      else if (subFileName.startsWith('media/lua/shared')) scope = 'shared';
  
-                     lua = data;
+                     lua = fixRequire(scope, data);
  
                      if (LUA_HEADER_FILE.length !== 0) {
                          let lines = [];
@@ -255,7 +280,7 @@
          }
      );
  
-     compileProjectDeclaration();
+    //  compileProjectDeclaration();
  
      const timeNow = new Date().getTime();
      const timeDelta = timeNow - timeThen;
@@ -276,13 +301,39 @@
  
      child_process.execSync(`npx tsc --declaration --outFile ${fileName}`);
  
+     const clientDFiles = getFiles('./src/client', 'd.ts');
+     const serverDFiles = getFiles('./src/server', 'd.ts');
+     const sharedDFiles = getFiles('./src/shared', 'd.ts');
+ 
+     let lines = fs.readFileSync(fileName).toString().split('\r\n');
+
+     for (let index = 0; index < lines.length; index++) {
+        let line = lines[index];
+        // Cut out useless declarations that are empty.
+        if (line.indexOf('declare module ') !== -1 && line.indexOf('{ }') !== -1) {
+            lines.splice(index--, 1);
+            continue;
+        } else if(line.length === 0) {
+            lines.splice(index--, 1);
+        }
+     }
+
+    if(lines.length === 0 && Object.keys(clientDFiles).length === 0 && Object.keys(serverDFiles).length === 0 && Object.keys(sharedDFiles).length === 0) {
+        cursor.grey();
+        console.log(`${PREFIX} - No declarations to export.`);
+        cursor.reset();
+        child_process.execSync(`del-cli ${fileName}`);
+        return;
+    }
+
+    lines.push('');
+
      cursor.brightGreen();
      console.log(`${PREFIX} - Refactoring project declarations..`);
      cursor.reset();
  
-     let lines = fs.readFileSync(fileName).toString().split('\r\n');
+     // Header //////////////
      lines = lines.reverse();
- 
      if (LUA_HEADER_FILE.length !== 0) {
          lines.push('');
          let header = LUA_HEADER_FILE.split('\r\n');
@@ -292,13 +343,27 @@
              lines.push(`// ${header[index]}`);
          }
      }
- 
      lines.push('');
      lines.push('/** @noResolution @noSelfInFile */');
      lines = lines.reverse();
+    // Contents //////////////
+     for (const filePath of Object.keys(clientDFiles)) {
+         lines.push(`/* File: ${filePath} */`);
+         const fileData = clientDFiles[filePath].split('\r\n');
+         for (const line of fileData) lines.push(line);
+     }
+     for (const filePath of Object.keys(serverDFiles)) {
+         lines.push(`/* File: ${filePath} */`);
+         const fileData = clientDFiles[filePath].split('\r\n');
+         for (const line of fileData) lines.push(line);
+     }
+     for (const filePath of Object.keys(sharedDFiles)) {
+         lines.push(`/* File: ${filePath} */`);
+         const fileData = clientDFiles[filePath].split('\r\n');
+         for (const line of fileData) lines.push(line);
+     }
      for (let index = 0; index < lines.length; index++) {
          let line = lines[index];
- 
          // Module declarations in d.ts file.
          if (line.indexOf('declare module "client/') !== -1) {
              line = line.replace('declare module "client/', 'declare module "');
@@ -307,21 +372,15 @@
          } else if (line.indexOf('declare module "shared/') !== -1) {
              line = line.replace('declare module "shared/', 'declare module "');
          }
- 
          // Imports in d.ts file.
          if (line.indexOf('from "client/') !== -1) line = line.replace('from "client/', 'from "');
          else if (line.indexOf('from "server/') !== -1) line = line.replace('from "server/', 'from "');
          else if (line.indexOf('from "shared/') !== -1) line = line.replace('from "shared/', 'from "');
- 
-         // Cut out useless declarations that are empty.
-         if (line.indexOf('declare module ') !== -1 && line.indexOf('{ }') !== -1) {
-             lines.splice(index--, 1);
-             continue;
-         }
- 
+         // Set refactored line.
          lines[index] = line;
      }
- 
+
+     // Footer //////////////
      if (LUA_FOOTER_FILE.length !== 0) {
          let footer = LUA_FOOTER_FILE.split('\r\n');
          for (let index = 0; index < footer.length; index++) {
@@ -330,7 +389,7 @@
          }
      }
  
-     fs.writeFileSync(fileName, lines.join('\r\n'));
+     fs.writeFileSync(fileName, lines.join('\r\n') + '\r\n');
  };
  
  const checkDir = (file: string) => {
@@ -343,6 +402,7 @@
  };
  
  const fixRequire = (scope: Scope, lua: string): string => {
+     if(lua.length === 0) return '';
      const fix = (fromImport: string): string => {
          let toImport = fromImport.replace('.', '/');
          // Remove cross-references for client/server/shared.
