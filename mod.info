@@ -2,3 +2,4 @@ name=PipeWrenchModTemplate
 poster=poster.png
 description=PipeWrenchModTemplate
 id=pipewrench_mod_template
+require=pipewrench_zomboid_lua_api
