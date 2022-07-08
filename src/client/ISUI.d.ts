@@ -22,38 +22,36 @@
  * SOFTWARE.
  */
 
-/** 
- * @noResolution 
- * @noSelfInFile 
+/**
+ * @noResolution
+ * @noSelfInFile
  * @author JabDoesThings
- * 
- * This is an example of manually typed Lua objects for a ProjectZomboid Lua pseudo-class. 
- * 
+ *
+ * This is an example of manually typed Lua objects for a ProjectZomboid Lua pseudo-class.
+ *
  * The name & location of this file is done on purpose. The TypeScript files using this
  * file will compile to Lua, referencing the actual Lua code properly.
  * Result:
  *   require 'ISUI/ISUIElement'
- * 
+ *
  */
 declare module 'ISUI' {
-    
-    import { zombie } from 'Zomboid';
+    import { Texture, UIElement, UIFont } from 'Zomboid';
 
-    /** 
+    /**
      * @customConstructor ISUIElement:new
      * @
      * File: ./src/client/ISUI/ISUIElement.lua
-     * 
+     *
      * NOTE: Use {PseudoClass:new} for customConstructor. This is how you create Lua
      * pseudo-classes in the Lua environment. (Java uses {Class.new}). Also, use @ on
      * the next line to prevent multi-line customConstructor definitions if you wish
      * to write documentation for the class.
      */
     export class ISUIElement {
-
         /* ### FIELDS ### */
 
-        readonly javaObject: zombie.ui.UIElement;
+        readonly javaObject: UIElement;
 
         /**
          * @param x (double)
@@ -236,9 +234,8 @@ declare module 'ISUI' {
 
         setVisible(visible: boolean): void;
 
-        getJavaObject(): zombie.ui.UIElement;
+        getJavaObject(): UIElement;
 
-        /** (The same as ISUIElement#isVisible()) */
         getIsVisible(): boolean;
 
         isVisible(): boolean;
@@ -276,7 +273,7 @@ declare module 'ISUI' {
          * @param alpha (double)
          */
         drawTextureAllPoint(
-            texture: zombie.core.textures.Texture | null,
+            texture: Texture,
             texLX: number,
             texLY: number,
             texRX: number,
@@ -303,7 +300,7 @@ declare module 'ISUI' {
          * @param blue (double)
          */
         drawTextureScaled(
-            texture: zombie.core.textures.Texture | null,
+            texture: Texture,
             x: number,
             y: number,
             width: number,
@@ -325,7 +322,7 @@ declare module 'ISUI' {
          * @param blue (double)
          */
         drawTextureScaledUniform(
-            texture: zombie.core.textures.Texture | null,
+            texture: Texture,
             x: number,
             y: number,
             scale: number,
@@ -347,7 +344,7 @@ declare module 'ISUI' {
          * @param blue (double)
          */
         drawTextureScaledAspect(
-            texture: zombie.core.textures.Texture | null,
+            texture: Texture,
             x: number,
             y: number,
             width: number,
@@ -370,7 +367,7 @@ declare module 'ISUI' {
          * @param blue (double)
          */
         drawTextureScaledAspect2(
-            texture: zombie.core.textures.Texture | null,
+            texture: Texture,
             x: number,
             y: number,
             width: number,
@@ -391,7 +388,7 @@ declare module 'ISUI' {
          * @param blue (double)
          */
         drawTexture(
-            texture: zombie.core.textures.Texture | null,
+            texture: Texture,
             x: number,
             y: number,
             alpha: number,
@@ -401,7 +398,7 @@ declare module 'ISUI' {
         ): void;
 
         drawTextureTiledX(
-            texture: zombie.core.textures.Texture | null,
+            texture: Texture,
             x: number,
             y: number,
             width: number,
@@ -413,7 +410,7 @@ declare module 'ISUI' {
         ): void;
 
         drawTextureTiledY(
-            texture: zombie.core.textures.Texture | null,
+            texture: Texture,
             x: number,
             y: number,
             width: number,
@@ -424,15 +421,10 @@ declare module 'ISUI' {
             alpha: number
         ): void;
 
-        DrawTextureAngle(
-            texture: zombie.core.textures.Texture | null,
-            centerX: number,
-            centerY: number,
-            angle: number
-        ): void;
+        DrawTextureAngle(texture: Texture, centerX: number, centerY: number, angle: number): void;
 
         drawTextureScaledStatic(
-            texture: zombie.core.textures.Texture | null,
+            texture: Texture,
             x: number,
             y: number,
             width: number,
@@ -444,7 +436,7 @@ declare module 'ISUI' {
         ): void;
 
         drawTextureStatic(
-            texture: zombie.core.textures.Texture | null,
+            texture: Texture,
             x: number,
             y: number,
             alpha: number,
@@ -517,7 +509,7 @@ declare module 'ISUI' {
             green: number,
             blue: number,
             alpha: number,
-            font: zombie.ui.UIFont
+            font: UIFont
         ): void;
 
         drawTextUntrimmed(
@@ -528,7 +520,7 @@ declare module 'ISUI' {
             green: number,
             blue: number,
             alpha: number,
-            font: zombie.ui.UIFont
+            font: UIFont
         ): void;
 
         drawTextCentre(
@@ -539,7 +531,7 @@ declare module 'ISUI' {
             green: number,
             blue: number,
             alpha: number,
-            font: zombie.ui.UIFont
+            font: UIFont
         ): void;
 
         drawText(
@@ -550,7 +542,7 @@ declare module 'ISUI' {
             green: number,
             blue: number,
             alpha: number,
-            font: zombie.ui.UIFont
+            font: UIFont
         ): void;
 
         drawTextRight(
@@ -561,7 +553,7 @@ declare module 'ISUI' {
             green: number,
             blue: number,
             alpha: number,
-            font: zombie.ui.UIFont
+            font: UIFont
         ): void;
 
         setAlwaysOnTop(flag: boolean): void;
@@ -574,7 +566,7 @@ declare module 'ISUI' {
             green: number,
             blue: number,
             alpha: number,
-            font: zombie.ui.UIFont
+            font: UIFont
         ): void;
 
         drawTextCentreStatic(
@@ -585,7 +577,7 @@ declare module 'ISUI' {
             green: number,
             blue: number,
             alpha: number,
-            font: zombie.ui.UIFont
+            font: UIFont
         ): void;
 
         drawTextStatic(
@@ -596,7 +588,7 @@ declare module 'ISUI' {
             green: number,
             blue: number,
             alpha: number,
-            font: zombie.ui.UIFont
+            font: UIFont
         ): void;
 
         drawTextRightStatic(
@@ -607,7 +599,7 @@ declare module 'ISUI' {
             green: number,
             blue: number,
             alpha: number,
-            font: zombie.ui.UIFont
+            font: UIFont
         ): void;
 
         addToUIManager(): void;
@@ -741,7 +733,7 @@ declare module 'ISUI' {
 
         /** @param playerNum (int) */
         stayOnSplitScreen(playerNum: number): void;
-        
+
         setWantKeyEvents(want: boolean): void;
 
         setForceCursorVisible(force: boolean): void;
