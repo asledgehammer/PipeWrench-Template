@@ -10,8 +10,7 @@
 import * as Events from 'ZomboidEvents';
 
 // ProjectZomboid API.
-import { IsoObject } from 'Zomboid';
-import { IsoPlayer } from 'Zomboid';
+import { IsoObject, IsoPlayer } from 'Zomboid';
 
 // (Our ISUI example typing of ISUIElement)
 import { ISUIElement } from 'ISUI';
