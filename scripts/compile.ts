@@ -151,11 +151,6 @@
          } else {
              if (!file.toLowerCase().endsWith(ext)) continue;
              toReturn[path] = fs.readFileSync(path).toString();
-             
-             // Ignore d.ts files with '@noExportToDst`.
-             if(ext === '.d.ts' && toReturn[path].indexOf('@noExport') !== -1) { 
-                delete toReturn[path];
-             }
          }
      }
  
