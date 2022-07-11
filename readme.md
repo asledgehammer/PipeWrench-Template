@@ -38,46 +38,7 @@ I won't turn this into an opinion piece, so we'll get into the meat and potatoes
 
 <br>
 
-## Environment Layout
-We will use my basic NPM environment.
-> **DISCLAIMER**: I'm not a wizard with NodeJs and setting up the best environments. I have a friend working on their own environment and I'd trust them over mine. For now my environment is in good enough condition to use.
-```
-- [root]
-  | 
-  |   # This is where exported typings populate when using 'npm run export'.
-  | - [dst]
-  |
-  |   # Right now this is the folder that provided & compiled Lua files in the 'src' folder go.
-  | - [media/lua]
-  |   |
-  |   | - [client]
-  |   | - [server]
-  |   \ - [shared]
-  |
-  |   # This is where the magic happens.
-  | - [scripts]
-  |
-  | - [src]
-  |   |
-  |   |   # These folders are just like 'media/lua/' folders when modding PZ traditionally.
-  |   | - [client]
-  |   | - [server]
-  |   | - [shared]
-  |   |  
-  |   |   # (When populated are attached to compiled & exported files)
-  |   | - header.txt
-  |   \ - footer.txt
-  |
-  |   # This is where PipeWrench & other typings go.
-  | - [typings]
-  | - |
-  |   \- [ProjectZomboid/{VERSION}/..]
-  |
-  | - mod.info
-  | - poster.png
-  \ - (NodeJs & TypeScript files..)
-```
-> I plan on adding a directory option for outputting compiled Lua, and exported typings. I also plan to generate the `mod.info` file in the future. 
+> **DISCLAIMER**: I'm not a wizard with NodeJs and setting up the best environments. I have a friend working on their own environment and I'd trust them over mine. For now my environment is in good enough condition to use. I plan on adding a directory option for outputting compiled Lua, and exported typings. I also plan to generate the `mod.info` file in the future. 
 
 <br>
 
