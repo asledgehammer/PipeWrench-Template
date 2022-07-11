@@ -3,8 +3,6 @@
 ![docs](https://i.imgur.com/AP94LfV.png)
 ![docs](https://i.imgur.com/cnt4Ik5.png)
 
-<br>
-
 ## What is PipeWrench?
 The PipeWrench project has three major goals:
 - Allow TypeScript to Lua as an alternative to only using Lua when coding mods in Project Zomboid.
@@ -21,8 +19,6 @@ PipeWrench is essentially two major components:
 
 **TL;DR: PipeWrench implements TypeScript support for modding Project Zomboid.**
 
-<br>
-
 ## What's the point of TypeScript in PZ? Isn't Lua enough?
 While you can do everything you need using only Lua (and that's totally fine!), there are a lot of potential issues that come from writing in scripting languages like Lua. Like JavaScript ES5 and prior, Lua itself doesn't deploy any solution for OOP (Object-Oriented Programming), coding practices. For example: While data types exist in Lua, checking parameter values are entirely in the hands of the programmer making for a lot of time spent writing code to maintain a bug-proof codebase. There are a few other issues while implementing pseudo-classes in Lua that deal with assigned properties, property signatures, mutability, visibility scope, property overloading, etc..
 
@@ -36,19 +32,11 @@ If you want to learn more about TypeScript and TypeScriptToLua, check out their 
 
 I won't turn this into an opinion piece, so we'll get into the meat and potatoes of PipeWrench!
 
-<br>
-
-> **DISCLAIMER**: I'm not a wizard with NodeJs and setting up the best environments. I have a friend working on their own environment and I'd trust them over mine. For now my environment is in good enough condition to use. I plan on adding a directory option for outputting compiled Lua, and exported typings. I also plan to generate the `mod.info` file in the future. 
-
-<br>
-
 ## Setup
 - Grab and clone https://github.com/asledgehammer/PipeWrenchTemplate
 - run `npm install` in the main folder.
 
 You should now have a *working* environment.
-
-<br>
 
 ## Commands
 - `npm run build-scripts`: Compiles the script(s) used to run the other commands. (Located in `./scripts/`)
