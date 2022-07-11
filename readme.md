@@ -1,7 +1,7 @@
 # PipeWrench: TypeScript for Project Zomboid
 
-![docs](./assets/intellisense.png)
-![docs](./assets/docs.png)
+![docs](https://i.imgur.com/AP94LfV.png)
+![docs](https://i.imgur.com/cnt4Ik5.png)
 
 <br>
 
