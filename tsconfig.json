@@ -4,7 +4,7 @@
     "declaration": true,
     "emitDeclarationOnly": true,
     "experimentalDecorators": true,
-    "lib":["ESNext", "DOM"],
+    "lib":["ESNext"],
     "module":"ESNext",
     "moduleResolution": "node",
     "outDir": "media/lua/shared",
