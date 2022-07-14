@@ -400,11 +400,31 @@
      }
      if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
  };
+
+ /**
+  * A temporary workaround for no `replaceAll` function by default.
+  * 
+  * NOTE: This can break if `to` contains the `target` to replace.
+  * 
+  * @param s The string to transform.
+  * @param target The target phrase to replace.
+  * @param to The phrase to replace the target.
+  * @returns The transformed string.
+  */
+ const replaceAll = (s: string, target: string, to: string): string => {
+    let attempts = 0;
+    while (s.indexOf(target) !== -1) {
+        if(attempts > 65535) break;
+        s = s.replace(target, to);
+        attempts++;
+    }
+    return s;
+ }
  
  const fixRequire = (scope: Scope, lua: string): string => {
      if(lua.length === 0) return '';
      const fix = (fromImport: string): string => {
-         let toImport = fromImport.replace('.', '/');
+         let toImport = replaceAll(fromImport,'.', '/');
          // Remove cross-references for client/server/shared.
          if (toImport.startsWith('shared/')) {
              toImport = toImport.substring('shared/'.length);
@@ -444,7 +464,7 @@
              const toImport = fix(fromImport);
              // Kahlua only works with '/', nor '.' in 'require(..)'.
              const from = 'require("' + fromImport + '")';
-             let to = "require('" + toImport.replace('.', '/') + "')";
+             let to = "require('" + replaceAll(toImport, '.', '/') + "')";
              lua = lua.replace(from, to);
          }
      } while (index !== -1);
