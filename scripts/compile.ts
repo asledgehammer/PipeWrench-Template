@@ -25,11 +25,11 @@
  if (fs.existsSync('./src/footer.txt')) LUA_FOOTER_FILE = fs.readFileSync('./src/footer.txt').toString();
  
  type ModInfo = {
-     name: string;
-     poster: string;
-     description: string;
-     id: string;
-     require: string[];
+     name: string | null;
+     poster: string | null;
+     description: string | null;
+     id: string | null;
+     require: string[] | null;
  };
  
  const getModInfo = (): ModInfo => {
@@ -184,7 +184,7 @@
          let lua = fs.readFileSync(src).toString();
  
          if (LUA_HEADER_FILE.length !== 0) {
-             let lines = [];
+             let lines: string[] = [];
              let header = LUA_HEADER_FILE.split('\r\n');
              for (let index = 0; index < header.length; index++) {
                  if (index === header.length - 1 && header[index].length === 0) continue;
@@ -194,7 +194,7 @@
          }
  
          if (LUA_FOOTER_FILE.length !== 0) {
-             let lines = [];
+             let lines: string[] = [];
              let footer = LUA_FOOTER_FILE.split('\r\n');
              for (let index = 0; index < footer.length; index++) {
                  if (index === footer.length - 1 && footer[index].length === 0) continue;
@@ -255,7 +255,7 @@
                      lua = fixRequire(scope, data);
  
                      if (LUA_HEADER_FILE.length !== 0) {
-                         let lines = [];
+                         let lines: string[] = [];
                          let header = LUA_HEADER_FILE.split('\r\n');
                          for (let index = 0; index < header.length; index++) {
                              if (index === header.length - 1 && header[index].length === 0) continue;
@@ -265,7 +265,7 @@
                      }
  
                      if (LUA_FOOTER_FILE.length !== 0) {
-                         let lines = [];
+                         let lines: string[] = [];
                          let footer = LUA_FOOTER_FILE.split('\r\n');
                          for (let index = 0; index < footer.length; index++) {
                              if (index === footer.length - 1 && footer[index].length === 0) continue;
