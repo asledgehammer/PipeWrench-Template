@@ -70,8 +70,8 @@ var getModInfo = function () {
                 .trim()
                 .split(',')
                 .map(function (entry) {
-                return entry.trim();
-            });
+                    return entry.trim();
+                });
         }
     }
     if (modInfo.id == null)
@@ -265,8 +265,8 @@ var compileProject = function () {
     cursor.reset();
     var timeThen = new Date().getTime();
     copyNonCompileFilesInDir('./src/client', './media/lua/client');
-    copyNonCompileFilesInDir('./src/server', './media/lua/server');
-    copyNonCompileFilesInDir('./src/shared', './media/lua/shared');
+    if (fs.existsSync('./src/server')) copyNonCompileFilesInDir('./src/server', './media/lua/server');
+    if (fs.existsSync('./src/shared')) copyNonCompileFilesInDir('./src/shared', './media/lua/shared');
     // TODO: Make this process automatic, not hard-coded.
     copyFile('./typings/PipeWrench/41.71/PipeWrench.lua', './media/lua/shared/PipeWrench.lua');
     copyFile('./typings/PipeWrench-Events/41.71/PipeWrench-Events.lua', './media/lua/shared/PipeWrench-Events.lua');
@@ -275,9 +275,9 @@ var compileProject = function () {
     // Create these temporary files so that the require paths are a certain pattern.
     if (!fs.existsSync('./src/client/_.ts'))
         fs.writeFileSync('./src/client/_.ts', '');
-    if (!fs.existsSync('./src/server/_.ts'))
+    if (fs.existsSync('./src/server') && !fs.existsSync('./src/server/_.ts'))
         fs.writeFileSync('./src/server/_.ts', '');
-    if (!fs.existsSync('./src/shared/_.ts'))
+    if (fs.existsSync('./src/shared') && !fs.existsSync('./src/shared/_.ts'))
         fs.writeFileSync('./src/shared/_.ts', '');
     (0, typescript_to_lua_1.transpileProject)('tsconfig.json', { emitDeclarationOnly: false }, function (fileName, data, _writeByteOrderMark, _onError) {
         // Ignore empty files.
