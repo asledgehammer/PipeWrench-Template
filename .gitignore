@@ -1,4 +1,4 @@
 package-lock.json
 media/lua/
 node_modules/
-dst/
+dist/

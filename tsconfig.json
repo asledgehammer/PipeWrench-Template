@@ -1,22 +1,32 @@
 {
   "compilerOptions": {
     "allowSyntheticDefaultImports": true,
-    "declaration": true,
-    "emitDeclarationOnly": true,
     "experimentalDecorators": true,
-    "lib":["ESNext"],
-    "module":"ESNext",
+    "lib": [
+      "ESNext"
+    ],
+    "module": "ESNext",
     "moduleResolution": "node",
-    "outDir": "media/lua/shared",
-    "rootDirs": ["./src/shared", "./src/client", "./src/server"],
+    "outDir": "dist",
     "strict": true,
-    "target":"ESNext",
-    "typeRoots": ["node_modules/@types", "lua-types/5.1", "./typings"],
-    "types": ["lua-types/5.1"]
+    "target": "ESNext",
+    "types": [
+      "lua-types/5.1",
+      "@shughesuk/pipewrench",
+      // "@shughesuk/pipewrench-events"
+    ]
   },
   "tstl": {
-    "noHeader": true
+    "luaLibImport": "require",
+    "noHeader": true,
+    "tstlVerbose": true,
+    "luaPlugins": [
+      {
+        "name": "@shughesuk/tstl-pipewrench"
+      },
+    ]
   },
-  "exclude": ["node_modules"],
-  "include": ["./typings/**/*.ts", "src/shared/**/*.ts", "src/client/**/*.ts", "src/server/**/*.ts", "node_modules/lua_types/5.1.d.ts"]
+  "include": [
+    "src",
+  ]
 }
