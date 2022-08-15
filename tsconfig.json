@@ -13,7 +13,7 @@
     "types": [
       "lua-types/5.1",
       "@shughesuk/pipewrench",
-      // "@shughesuk/pipewrench-events"
+      "@shughesuk/pipewrench-events"
     ]
   },
   "tstl": {

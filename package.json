@@ -25,6 +25,7 @@
     "typescript-to-lua": "^1.4.2"
   },
   "dependencies": {
-    "@shughesuk/pipewrench": "^41.73.12"
+    "@shughesuk/pipewrench": "^41.73.12",
+    "@shughesuk/pipewrench-events": "file:../PipeWrench-Events"
   }
 }

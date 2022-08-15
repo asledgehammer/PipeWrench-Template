@@ -31,10 +31,10 @@
  */
 
 // PipeWrench API.
-import { IsoObject, IsoPlayer, ISUIElement } from 'PipeWrench';
+import { IsoObject, IsoPlayer, ISUIElement } from '@shughesuk/pipewrench';
 
 // PipeWrench Events API.
-import * as Events from 'PipeWrench-Events';
+import * as Events from '@shughesuk/pipewrench-events';
 
 /**
  * @param object The object to stringify.
