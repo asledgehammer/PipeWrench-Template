@@ -31,9 +31,8 @@
  */
 
 // PipeWrench API.
-import { getPlayer } from '@shughesuk/pipewrench';
-import * as Events from '@shughesuk/pipewrench-events';
-
+import { getPlayer } from '@asledgehammer/pipewrench';
+import * as Events from '@asledgehammer/pipewrench-events';
 // Example reference API.
 import { addRedSquare, alertObjectsAdded, greetPlayer } from './api/ExampleAPI';
 
@@ -43,3 +42,4 @@ Events.onGameStart.addListener(() => {
     greetPlayer(getPlayer());
     alertObjectsAdded();
 });
+
