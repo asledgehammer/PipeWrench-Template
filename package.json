@@ -33,7 +33,8 @@
     "lua-types": "^2.11.0",
     "npm-watch": "^0.11.0",
     "typescript": "^4.6.2",
-    "typescript-to-lua": "^1.4.2"
+    "typescript-to-lua": "^1.4.2",
+    "del-cli": "^5.0.0"
   },
   "dependencies": {
     "@asledgehammer/pipewrench": "^41.73.21",
