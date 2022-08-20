@@ -2,13 +2,18 @@
   "name": "pipewrench_mod_template",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "watch": {
+    "compile": {
+      "patterns": [
+        "src"
+      ],
+      "extensions": "ts,js,jsx,lua,json"
+    }
+  },
   "scripts": {
-    "clean": "del-cli --force ./media/lua ./dst",
-    "build-scripts": "tsc scripts/compile.ts",
-    "compile": "node scripts/compile.js",
-    "export": "node scripts/compile.js --declarations",
-    "dev": "node scripts/compile.js --watch"
+    "compile": "tstl",
+    "clean": "del-cli dist",
+    "watch": "npm-watch"
   },
   "repository": {
     "type": "git",
@@ -24,21 +29,14 @@
   },
   "homepage": "https://github.com/asledgehammer/ZomboidTypeScriptModTemplate.git#readme",
   "devDependencies": {
-    "ansi": "^0.3.1",
-    "chokidar": "^3.5.3",
-    "del-cli": "^5.0.0",
+    "@asledgehammer/tstl-pipewrench": "^0.0.8",
     "lua-types": "^2.11.0",
-    "ts-node": "^10.7.0",
+    "npm-watch": "^0.11.0",
     "typescript": "^4.6.2",
     "typescript-to-lua": "^1.4.2"
   },
-  "typings": "typings/",
-  "types": "./",
-  "typesVersions": {
-    ">=4.6": {
-      "*": [
-        "ts4.6/*"
-      ]
-    }
+  "dependencies": {
+    "@asledgehammer/pipewrench": "^41.73.21",
+    "@asledgehammer/pipewrench-events": "^41.73.0"
   }
 }
