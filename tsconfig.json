@@ -8,6 +8,7 @@
     "module": "ESNext",
     "moduleResolution": "node",
     "outDir": "dist",
+    "rootDir": "src",
     "strict": true,
     "target": "ESNext",
     "types": [
@@ -22,7 +23,7 @@
     "tstlVerbose": true,
     "luaPlugins": [
       {
-        "name": "@shughesuk/tstl-pipewrench"
+        "name": "@asledgehammer/tstl-pipewrench"
       },
     ]
   },

@@ -42,4 +42,3 @@ Events.onGameStart.addListener(() => {
     greetPlayer(getPlayer());
     alertObjectsAdded();
 });
-
