@@ -38,7 +38,7 @@ import { addRedSquare, alertObjectsAdded, greetPlayer } from './api/ExampleAPI';
 
 // Add all initialization code here.
 Events.onGameStart.addListener(() => {
-    addRedSquare();
-    greetPlayer(getPlayer());
-    alertObjectsAdded();
+  addRedSquare();
+  greetPlayer(getPlayer());
+  alertObjectsAdded();
 });

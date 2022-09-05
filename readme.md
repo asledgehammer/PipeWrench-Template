@@ -43,7 +43,7 @@ I won't turn this into an opinion piece, so we'll get into the meat and potatoes
 - `git clone https://github.com/asledgehammer/PipeWrenchTemplate`
 - run `npm install` in the main folder.
 
-You should now have a *working* environment.
+You should now have a _working_ environment.
 
 ## Commands
 
