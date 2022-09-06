@@ -29,7 +29,7 @@
   },
   "homepage": "https://github.com/asledgehammer/ZomboidTypeScriptModTemplate.git#readme",
   "devDependencies": {
-    "@asledgehammer/tstl-pipewrench": "^0.0.8",
+    "@asledgehammer/tstl-pipewrench": "^0.0.13",
     "lua-types": "^2.11.0",
     "npm-watch": "^0.11.0",
     "typescript": "^4.6.2",
