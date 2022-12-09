@@ -19,7 +19,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/asledgehammer/ZomboidTypeScriptModTemplate.git"
+    "url": "git+https://github.com/asledgehammer/PipeWrench-Template.git"
   },
   "keywords": [
     "zomboid_lua_test"
@@ -41,13 +41,13 @@
     "eslint-import-resolver-typescript": "^3.5.0",
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-prettier": "^4.2.1",
-    "lua-types": "^2.11.0",
     "npm-watch": "^0.11.0",
     "prettier": "^2.7.1",
     "prettier-eslint": "^15.0.1",
     "ts-node": "^10.9.1",
-    "typescript": "^4.6.2",
-    "typescript-to-lua": "^1.4.2"
+    "lua-types": "^2.13.1",
+    "typescript": "^4.9.4",
+    "typescript-to-lua": "^1.11.1"
   },
   "dependencies": {
     "@asledgehammer/pipewrench": "^41.73.21",
