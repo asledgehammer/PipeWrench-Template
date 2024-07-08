@@ -31,7 +31,7 @@
   },
   "homepage": "https://github.com/asledgehammer/ZomboidTypeScriptModTemplate.git#readme",
   "devDependencies": {
-    "@asledgehammer/tstl-pipewrench": "^0.0.15",
+    "@asledgehammer/tstl-pipewrench": "^0.0.16",
     "@types/fs-extra": "^9.0.13",
     "@typescript-eslint/eslint-plugin": "^5.36.2",
     "@typescript-eslint/parser": "^5.36.2",
@@ -50,7 +50,7 @@
     "typescript-to-lua": "^1.11.1"
   },
   "dependencies": {
-    "@asledgehammer/pipewrench": "^41.73.21",
+    "@asledgehammer/pipewrench": "^41.78.16",
     "@asledgehammer/pipewrench-events": "^41.73.0",
     "fs-extra": "^10.1.0"
   }
