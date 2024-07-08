@@ -7,10 +7,13 @@
  */
 
 // PipeWrench API.
-import { IsoObject, IsoPlayer, ISUIElement } from '@asledgehammer/pipewrench';
+import { IsoObject, IsoPlayer } from '@asledgehammer/pipewrench';
 
 // PipeWrench Events API.
 import * as Events from '@asledgehammer/pipewrench-events';
+
+// Example API.
+import { TSUIRedSquare } from './TSUIRedSquare';
 
 /**
  * @param object The object to stringify.
@@ -24,14 +27,7 @@ export function isoObjectToString(object: IsoObject): string {
  * Adds a red square element to the UI using the example ISUI typings.
  */
 export function addRedSquare() {
-  const element = new ISUIElement(512, 256, 256, 256);
-  element.initialise();
-  element.instantiate();
-  element.addToUIManager();
-  element.setVisible(true);
-  element.render = () => {
-    element.drawRect(512, 256, 256, 256, 1, 1.0, 0.0, 0.0);
-  };
+  new TSUIRedSquare(512, 256, 256, 256);
 }
 
 /**
