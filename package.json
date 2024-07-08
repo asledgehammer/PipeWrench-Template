@@ -15,7 +15,7 @@
     "clean": "del-cli dist",
     "check": "prettier --check . && eslint .",
     "lint": "prettier --write . && eslint .",
-    "watch": "tstl --watch --outDir ~/Zomboid/mods"
+    "watch": "tstl --watch --outDir C:/Users/jabdo/Zomboid/mods"
   },
   "repository": {
     "type": "git",
@@ -31,7 +31,7 @@
   },
   "homepage": "https://github.com/asledgehammer/ZomboidTypeScriptModTemplate.git#readme",
   "devDependencies": {
-    "@asledgehammer/tstl-pipewrench": "^0.0.16",
+    "@asledgehammer/tstl-pipewrench": "^0.0.19",
     "@types/fs-extra": "^9.0.13",
     "@typescript-eslint/eslint-plugin": "^5.36.2",
     "@typescript-eslint/parser": "^5.36.2",
