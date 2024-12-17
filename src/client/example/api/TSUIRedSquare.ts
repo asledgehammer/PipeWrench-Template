@@ -1,4 +1,4 @@
-import { ISUIElement } from '@asledgehammer/pipewrench';
+import { ISUIElement } from '@asledgehammer/pipewrench/client';
 
 export class TSUIRedSquare extends ISUIElement {
   constructor(x: number, y: number, width: number, height: number) {
